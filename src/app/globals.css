@@ -75,38 +75,7 @@ body {
   font-weight: 600;
 }
 
-/* Custom KREO Loading Animations */
-@keyframes loading-bar {
-  0% {
-    width: 0%;
-    transform: translateX(-100%);
-  }
-  50% {
-    width: 100%;
-    transform: translateX(0%);
-  }
-  100% {
-    width: 100%;
-    transform: translateX(100%);
-  }
-}
-
-@keyframes typing-cursor {
-  0%, 50% {
-    opacity: 1;
-  }
-  51%, 100% {
-    opacity: 0;
-  }
-}
-
-.animate-loading-bar {
-  animation: loading-bar 2s ease-in-out infinite;
-}
-
-.animate-typing-cursor {
-  animation: typing-cursor 1s infinite;
-}
+/* Removed heavy loading animations for better performance */
 
 /* Scroll Arrow Animation */
 @keyframes scroll-fade {
