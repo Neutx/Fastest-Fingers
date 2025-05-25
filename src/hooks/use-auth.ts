@@ -115,7 +115,9 @@ export function useAuthProvider(): AuthContextType {
     try {
       setLoading(true);
       const result = await signInWithPopup(auth, googleProvider);
-      await collectUserData(result.user);
+      setLoading(false); // Set loading to false immediately after sign-in
+      
+      collectUserData(result.user).catch(console.error);
     } catch (error) {
       console.error('Error signing in with Google:', error);
       setLoading(false);
