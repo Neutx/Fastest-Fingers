@@ -4,7 +4,6 @@ import { useAuth } from "@/components/auth-provider";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { LoadingAnimation } from "@/components/ui/loading";
-import { PrizePool } from "@/components/ui/prize-pool";
 import { LeaderboardSection } from "@/components/ui/leaderboard-section";
 import { DesktopOnly } from "@/components/ui/desktop-only";
 import { useAnimationObserver } from "@/hooks/use-animation-observer";
@@ -19,7 +18,7 @@ interface UserScore {
   score: number;
 }
 
-export default function ScorePage() {
+export default function LeaderboardPage() {
   const { user, loading, signOut } = useAuth();
   const router = useRouter();
   const [userScore, setUserScore] = useState<UserScore | null>(null);
@@ -114,7 +113,7 @@ export default function ScorePage() {
   }
 
   return (
-    <main className="h-screen w-screen bg-black relative flex flex-col overflow-hidden">
+    <main className="h-screen w-screen bg-black relative flex flex-col overflow-hidden scrollbar-hide">
       {/* Header */}
       <header className={`flex items-center justify-between px-4 sm:px-6 lg:px-8 py-3 sm:py-4 lg:py-6 transition-opacity duration-800 flex-shrink-0 ${isPageLoaded ? 'opacity-100' : 'opacity-0'}`}>
         <div className="flex items-center gap-4 sm:gap-8 lg:gap-12">
@@ -134,7 +133,7 @@ export default function ScorePage() {
             </button>
             <button 
               onClick={() => router.push('/leaderboard')}
-              className="text-white font-jost text-sm sm:text-lg lg:text-xl hover:text-[#A578FD] transition-colors"
+              className="text-[#A578FD] font-jost text-sm sm:text-lg lg:text-xl"
             >
               Leaderboard
             </button>
@@ -154,33 +153,42 @@ export default function ScorePage() {
         </button>
       </header>
 
-      {/* Main Content */}
-      <div className="flex-1 flex items-start justify-between px-4 sm:px-8 lg:px-16 py-4 sm:py-8 lg:py-12 gap-4 sm:gap-8 lg:gap-16 relative overflow-hidden min-h-0">
-        {/* Left Side - Score Details */}
-        <div className={`flex-1 max-w-xs sm:max-w-sm lg:max-w-xl transition-all duration-1000 transform flex flex-col mt-8 sm:mt-12 lg:mt-16 ${isPageLoaded ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-8'}`} style={{ transitionDelay: '200ms' }}>
-          {/* Stats */}
-          <div className="mb-6 sm:mb-8 lg:mb-12">
-            <p className="text-white font-jost text-lg sm:text-2xl lg:text-3xl mb-3 sm:mb-4 lg:mb-6">
-              {userScore?.wpm || 0} WPM | {userScore?.accuracy || 0}% Accuracy
-            </p>
-            <h1 className="text-[#A578FD] font-jost font-bold text-[68px] mb-6 sm:mb-8 lg:mb-12 leading-tight">
-              Your Score: {userScore?.score || 0}
-            </h1>
-          </div>
-
-          {/* Giveaway Button */}
-          <button className="bg-[#A578FD] text-white px-4 sm:px-6 lg:px-8 py-2 sm:py-3 lg:py-4 rounded-xl font-jost font-bold text-xs sm:text-sm lg:text-base uppercase hover:bg-[#A578FD]/90 hover:shadow-lg hover:shadow-[#A578FD]/50 transition-all duration-300 transform hover:scale-105 hover-pop">
-            Participate in the Giveaway
-          </button>
-        </div>
-
-        {/* Prize Pool */}
-        <div className="flex-shrink-0 hidden lg:block">
-        <PrizePool />
+      {/* Prize Pool - Absolutely positioned, doesn't affect layout */}
+      {/* 
+        POSITIONING CONTROLS:
+        - Horizontal (X-axis): Change 'left-8 sm:left-12 lg:left-20' values
+          - left-4 = 16px, left-8 = 32px, left-12 = 48px, left-16 = 64px, left-20 = 80px
+        - Vertical (Y-axis): Change 'top-1/3' value
+          - top-1/4 = 25% from top, top-1/3 = 33% from top, top-1/2 = 50% from top
+          - Or use specific values like 'top-32' (128px), 'top-40' (160px), 'top-48' (192px)
+      */}
+      <div className={`absolute left-12 sm:left-16 lg:left-24 top-1/4 transform z-10 transition-all duration-1000 ${isPageLoaded ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-8'}`} style={{ transitionDelay: '200ms' }}>
+        <div className="relative">
+          <div className="border border-white/30 rounded-lg bg-black/20 backdrop-blur-sm hover-pop">
+            {/* Red Label */}
+            <div className="absolute -top-3 right-4">
+              <div className="bg-red-600 text-white px-4 py-1 rounded text-xs font-bold uppercase tracking-wide">
+                CURR PRIZE POOL
               </div>
-              
-        {/* Right Side - New Leaderboard */}
-        <div className={`flex-1 max-w-sm sm:max-w-lg lg:max-w-2xl transition-all duration-1000 transform flex flex-col min-h-0 ${isPageLoaded ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-8'}`} style={{ transitionDelay: '400ms' }}>
+            </div>
+
+            {/* Content */}
+            <div className="pt-6 pb-4 px-6">
+              <div className="text-white font-bold text-[42px] leading-none mb-1">
+                ₹10,000
+              </div>
+              <div className="text-white/50 text-sm">
+                5000 + 20 × 250
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Content - Centered Leaderboard */}
+      <div className="flex-1 flex items-center justify-center px-4 sm:px-8 lg:px-16 py-2 sm:py-4 lg:py-6 relative overflow-hidden min-h-0">
+        {/* Centered Leaderboard */}
+        <div className={`max-w-4xl w-full transition-all duration-1000 transform flex flex-col min-h-0 ${isPageLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`} style={{ transitionDelay: '400ms' }}>
           <div className="h-full flex flex-col overflow-hidden">
             <LeaderboardSection 
               players={leaderboardPlayers}
@@ -189,15 +197,6 @@ export default function ScorePage() {
           </div>
         </div>
       </div>
-
-      {/* Footer */}
-      <div className={`absolute bottom-4 sm:bottom-6 lg:bottom-8 left-4 sm:left-6 lg:left-8 transition-opacity duration-1000 ${isPageLoaded ? 'opacity-100' : 'opacity-0'}`} style={{ transitionDelay: '600ms' }}>
-        <h2 className="text-[#A578FD] font-faster-one text-2xl sm:text-4xl lg:text-5xl leading-tight tracking-wider">
-          FASTEST
-          <br />
-          FINGERS
-        </h2>
-      </div>
     </main>
   );
-}
+} 

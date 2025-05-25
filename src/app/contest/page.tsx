@@ -5,20 +5,23 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { LoadingAnimation } from "@/components/ui/loading";
 import { RulesModal } from "@/components/ui/rules-modal";
+import { DesktopOnly } from "@/components/ui/desktop-only";
 import { useAnimationObserver } from "@/hooks/use-animation-observer";
 import { useTypingTest } from "@/hooks/use-typing-test";
 import { generateTypingText } from "@/lib/text-generator";
 import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
 import { db } from "@/lib/firebase";
+import { isMobileDevice } from "@/utils/device-detection";
 import Image from "next/image";
 
 export default function ContestPage() {
-  const { user, loading } = useAuth();
+  const { user, loading, signOut } = useAuth();
   const router = useRouter();
   const [showRules, setShowRules] = useState(true); // Show rules by default
   const [hasShownInitialRules, setHasShownInitialRules] = useState(false);
   const [hasCompletedTest, setHasCompletedTest] = useState(false);
   const [isCheckingTestStatus, setIsCheckingTestStatus] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
 
   const [sampleText] = useState(() => generateTypingText(30));
   
@@ -33,6 +36,11 @@ export default function ContestPage() {
 
   // Initialize animation observer
   useAnimationObserver();
+
+  // Check if device is mobile
+  useEffect(() => {
+    setIsMobile(isMobileDevice());
+  }, []);
 
   // Redirect to home if not authenticated
   useEffect(() => {
@@ -139,10 +147,15 @@ export default function ContestPage() {
     return null;
   }
 
+  // Show desktop-only message for mobile devices
+  if (isMobile) {
+    return <DesktopOnly />;
+  }
+
   return (
     <main className="min-h-screen bg-black relative flex flex-col">
       {/* Header */}
-      <header className="flex items-center p-8 animate-fade-in-up opacity-0 absolute top-0 left-0 right-0 z-10">
+      <header className="flex items-center justify-between px-8 py-6 animate-fade-in-up opacity-0 absolute top-0 left-0 right-0 z-10">
         <div className="flex items-center gap-8">
           <Image
             src="/kreo.png"
@@ -151,13 +164,46 @@ export default function ContestPage() {
             height={44}
             className="hover-pop"
           />
-          <button 
-            onClick={() => setShowRules(true)}
-            className="rules-button text-white font-jost text-[34px] hover:text-[#A578FD] transition-colors focus:outline-none"
-          >
-            Rules
-          </button>
+          <nav className="flex items-center gap-8">
+            <button 
+              onClick={() => router.push('/contest')}
+              className="text-[#A578FD] font-jost text-xl"
+            >
+              Home
+            </button>
+            <button 
+              onClick={() => router.push('/leaderboard')}
+              className="text-white font-jost text-xl hover:text-[#A578FD] transition-colors"
+            >
+              Leaderboard
+            </button>
+            <button 
+              onClick={() => router.push('/giveaway')}
+              className="text-white font-jost text-xl hover:text-[#A578FD] transition-colors"
+            >
+              Giveaway
+            </button>
+            <button 
+              onClick={() => setShowRules(true)}
+              className="text-white font-jost text-xl hover:text-[#A578FD] transition-colors focus:outline-none"
+            >
+              Rules
+            </button>
+          </nav>
         </div>
+        <button 
+          onClick={async () => {
+            try {
+              await signOut();
+              router.push('/');
+            } catch (error) {
+              console.error('Error logging out:', error);
+            }
+          }}
+          className="text-white font-jost text-xl hover:text-[#A578FD] transition-colors"
+        >
+          Log Out
+        </button>
       </header>
 
       {/* Main Content */}
