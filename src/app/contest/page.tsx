@@ -137,8 +137,8 @@ export default function ContestPage() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [handleKeyPress, showRules]);
 
-  // Show loading while checking auth or test status
-  if (loading || isCheckingTestStatus) {
+  // Only show loading if we're still checking test status (not for auth)
+  if (isCheckingTestStatus) {
     return <LoadingAnimation />;
   }
 

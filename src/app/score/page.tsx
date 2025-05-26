@@ -3,14 +3,15 @@
 import { useAuth } from "@/components/auth-provider";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { LoadingAnimation } from "@/components/ui/loading";
 import { PrizePool } from "@/components/ui/prize-pool";
 import { LeaderboardSection } from "@/components/ui/leaderboard-section";
 import { DesktopOnly } from "@/components/ui/desktop-only";
 import { useAnimationObserver } from "@/hooks/use-animation-observer";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
+
 import { isMobileDevice } from "@/utils/device-detection";
+import { Menu, X } from "lucide-react";
 import Image from "next/image";
 
 interface UserScore {
@@ -25,6 +26,7 @@ export default function ScorePage() {
   const [userScore, setUserScore] = useState<UserScore | null>(null);
   const [isPageLoaded, setIsPageLoaded] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   // Initialize animation observer
   useAnimationObserver();
@@ -103,6 +105,7 @@ export default function ScorePage() {
     return <LoadingAnimation />;
   }
 
+
   // Don't render if not authenticated
   if (!user) {
     return null;
@@ -116,6 +119,7 @@ export default function ScorePage() {
   return (
     <main className="h-screen w-screen bg-black relative flex flex-col overflow-hidden">
       {/* Header */}
+
       <header className={`flex items-center justify-between px-4 sm:px-6 lg:px-8 py-3 sm:py-4 lg:py-6 transition-opacity duration-800 flex-shrink-0 ${isPageLoaded ? 'opacity-100' : 'opacity-0'}`}>
         <div className="flex items-center gap-4 sm:gap-8 lg:gap-12">
           <Image
@@ -145,17 +149,105 @@ export default function ScorePage() {
               Giveaway
             </button>
           </nav>
+
+      <header className={`relative z-30 flex items-center justify-between px-8 py-6 transition-opacity duration-800 ${isPageLoaded ? 'opacity-100' : 'opacity-0'}`}>
+        {/* Logo */}
+        <Image
+          src="/kreo.png"
+          alt="KREO Logo"
+          width={142}
+          height={44}
+          className="hover-pop"
+        />
+
+        {/* Desktop Navigation */}
+        <div className="hidden md:flex items-center gap-12">
+          <button 
+            onClick={() => router.push('/homepage')}
+            className="text-white font-jost text-xl hover:text-[#A578FD] transition-colors"
+          >
+            Home
+          </button>
+          <button 
+            onClick={() => router.push('/leaderboard')}
+            className="text-white font-jost text-xl hover:text-[#A578FD] transition-colors"
+          >
+            Leaderboard
+          </button>
+          <button 
+            onClick={() => router.push('/giveaway')}
+            className="text-white font-jost text-xl hover:text-[#A578FD] transition-colors"
+          >
+            Giveaway
+          </button>
+          <button 
+            onClick={handleLogout}
+            className="text-white font-jost text-xl hover:text-[#A578FD] transition-colors"
+          >
+            Log Out
+          </button>
+
         </div>
+
+        {/* Mobile Hamburger */}
         <button 
+
           onClick={handleLogout}
           className="text-white font-jost text-sm sm:text-lg lg:text-xl hover:text-[#A578FD] transition-colors"
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          className="md:hidden text-white hover:text-[#A578FD] transition-colors"
         >
-          Log Out
+          {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
+
+        {/* Mobile Menu */}
+        {isMobileMenuOpen && (
+          <div className="absolute top-full left-0 right-0 bg-black/95 backdrop-blur-sm border-t border-white/20 md:hidden">
+            <div className="flex flex-col py-4">
+              <button 
+                onClick={() => {
+                  router.push('/homepage')
+                  setIsMobileMenuOpen(false)
+                }}
+                className="text-white font-jost text-lg hover:text-[#A578FD] transition-colors py-3 px-8 text-left"
+              >
+                Home
+              </button>
+              <button 
+                onClick={() => {
+                  router.push('/leaderboard')
+                  setIsMobileMenuOpen(false)
+                }}
+                className="text-white font-jost text-lg hover:text-[#A578FD] transition-colors py-3 px-8 text-left"
+              >
+                Leaderboard
+              </button>
+              <button 
+                onClick={() => {
+                  router.push('/giveaway')
+                  setIsMobileMenuOpen(false)
+                }}
+                className="text-white font-jost text-lg hover:text-[#A578FD] transition-colors py-3 px-8 text-left"
+              >
+                Giveaway
+              </button>
+              <button 
+                onClick={() => {
+                  handleLogout()
+                  setIsMobileMenuOpen(false)
+                }}
+                className="text-white font-jost text-lg hover:text-[#A578FD] transition-colors py-3 px-8 text-left"
+              >
+                Log Out
+              </button>
+            </div>
+          </div>
+        )}
       </header>
 
       {/* Main Content */}
       <div className="flex-1 flex items-start justify-between px-4 sm:px-8 lg:px-16 py-4 sm:py-8 lg:py-12 gap-4 sm:gap-8 lg:gap-16 relative overflow-hidden min-h-0">
+      <div className="flex-1 flex flex-col lg:flex-row items-center justify-between px-4 lg:px-16 py-12 gap-8 lg:gap-16 relative overflow-visible">
         {/* Left Side - Score Details */}
         <div className={`flex-1 max-w-xs sm:max-w-sm lg:max-w-xl transition-all duration-1000 transform flex flex-col mt-8 sm:mt-12 lg:mt-16 ${isPageLoaded ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-8'}`} style={{ transitionDelay: '200ms' }}>
           {/* Stats */}
