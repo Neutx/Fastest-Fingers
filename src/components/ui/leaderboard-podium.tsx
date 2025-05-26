@@ -1,11 +1,5 @@
 import Image from "next/image";
-
-interface LeaderboardPlayer {
-  rank: number;
-  name: string;
-  score: number;
-  avatar?: string;
-}
+import { LeaderboardPlayer } from "@/types/leaderboard";
 
 interface LeaderboardPodiumProps {
   topPlayers: LeaderboardPlayer[];
@@ -110,13 +104,15 @@ export function LeaderboardPodium({ topPlayers }: LeaderboardPodiumProps) {
 
             {/* Name */}
             <div 
-              className="absolute text-white font-medium"
+              className="absolute text-white font-medium truncate"
               style={{
-                left: '213.01px',
+                left: '180px',
                 top: '201.03px',
+                width: '144px',
                 fontSize: '17.706px',
                 lineHeight: '21px',
-                fontFamily: 'Inter'
+                fontFamily: 'Inter',
+                textAlign: 'center'
               }}
             >
               {first.name}
@@ -126,11 +122,13 @@ export function LeaderboardPodium({ topPlayers }: LeaderboardPodiumProps) {
             <div 
               className="absolute text-[#A578FD] font-bold"
               style={{
-                left: '215.5px',
+                left: '180px',
                 top: '232.15px',
+                width: '144px',
                 fontSize: '27.4453px',
                 lineHeight: '33px',
-                fontFamily: 'Inter'
+                fontFamily: 'Inter',
+                textAlign: 'center'
               }}
             >
               {first.score}
@@ -185,13 +183,15 @@ export function LeaderboardPodium({ topPlayers }: LeaderboardPodiumProps) {
 
             {/* Name */}
             <div 
-              className="absolute text-white font-medium"
+              className="absolute text-white font-medium truncate"
               style={{
-                left: '35.23px',
+                left: '10px',
                 top: '241.31px',
+                width: '120px',
                 fontSize: '17.706px',
                 lineHeight: '21px',
-                fontFamily: 'Inter'
+                fontFamily: 'Inter',
+                textAlign: 'center'
               }}
             >
               {second.name}
@@ -201,11 +201,13 @@ export function LeaderboardPodium({ topPlayers }: LeaderboardPodiumProps) {
             <div 
               className="absolute text-[#009BD6] font-bold"
               style={{
-                left: '52px',
+                left: '10px',
                 top: '267px',
+                width: '120px',
                 fontSize: '22.1326px',
                 lineHeight: '27px',
-                fontFamily: 'Inter'
+                fontFamily: 'Inter',
+                textAlign: 'center'
               }}
             >
               {second.score}
@@ -260,13 +262,15 @@ export function LeaderboardPodium({ topPlayers }: LeaderboardPodiumProps) {
 
             {/* Name */}
             <div 
-              className="absolute text-white font-medium"
+              className="absolute text-white font-medium truncate"
               style={{
-                left: '380.09px',
+                left: '360px',
                 top: '236.88px',
+                width: '120px',
                 fontSize: '17.706px',
                 lineHeight: '21px',
-                fontFamily: 'Inter'
+                fontFamily: 'Inter',
+                textAlign: 'center'
               }}
             >
               {third.name}
@@ -276,11 +280,13 @@ export function LeaderboardPodium({ topPlayers }: LeaderboardPodiumProps) {
             <div 
               className="absolute text-[#00D95F] font-bold"
               style={{
-                left: '400px',
+                left: '360px',
                 top: '272px',
+                width: '120px',
                 fontSize: '22.1326px',
                 lineHeight: '27px',
-                fontFamily: 'Inter'
+                fontFamily: 'Inter',
+                textAlign: 'center'
               }}
             >
               {third.score}
@@ -379,11 +385,13 @@ export function LeaderboardPodium({ topPlayers }: LeaderboardPodiumProps) {
 
             {/* Name */}
             <div 
-              className="absolute text-white font-medium text-xs sm:text-sm md:text-base text-center"
+              className="absolute text-white font-medium text-xs sm:text-sm md:text-base text-center truncate"
               style={{
                 left: '32%',
                 top: '64%',
-                width: '36%'
+                width: '36%',
+                whiteSpace: 'nowrap',
+                overflow: 'hidden'
               }}
             >
               {first.name}
@@ -448,11 +456,13 @@ export function LeaderboardPodium({ topPlayers }: LeaderboardPodiumProps) {
 
             {/* Name */}
             <div 
-              className="absolute text-white font-medium text-xs sm:text-sm text-center"
+              className="absolute text-white font-medium text-xs sm:text-sm text-center truncate"
               style={{
                 left: '1%',
                 top: '76%',
-                width: '30%'
+                width: '30%',
+                whiteSpace: 'nowrap',
+                overflow: 'hidden'
               }}
             >
               {second.name}
@@ -517,11 +527,13 @@ export function LeaderboardPodium({ topPlayers }: LeaderboardPodiumProps) {
 
             {/* Name */}
             <div 
-              className="absolute text-white font-medium text-xs sm:text-sm text-center"
+              className="absolute text-white font-medium text-xs sm:text-sm text-center truncate"
               style={{
                 left: '69%',
                 top: '75%',
-                width: '30%'
+                width: '30%',
+                whiteSpace: 'nowrap',
+                overflow: 'hidden'
               }}
             >
               {third.name}

@@ -2,6 +2,8 @@
 
 import { Button } from "@/components/ui/button"
 import { useAuth } from "@/components/auth-provider"
+import { useContestSettings } from "@/hooks/use-contest-settings"
+import { trackExploreHive65Click } from "@/lib/button-tracking"
 
 interface RuleCardProps {
   title: string
@@ -24,7 +26,8 @@ function RuleCard({ title, description, highlight }: RuleCardProps) {
 }
 
 export function RulesSection() {
-  const { signInWithGoogle } = useAuth()
+  const { signInWithGoogle, user } = useAuth()
+  const { getFormattedStartDateTime, settings } = useContestSettings()
   
   const handleGetStarted = async () => {
     try {
@@ -34,9 +37,22 @@ export function RulesSection() {
     }
   }
 
-  const handleExploreHive = () => {
-    // TODO: Navigate to Hive 65 page
-    console.log("Navigate to Hive 65")
+  const handleExploreHive = async () => {
+    // Track the button click
+    await trackExploreHive65Click(user?.uid);
+    
+  }
+
+  const getContestDurationText = () => {
+    if (!settings) return "24 hours";
+    return settings.duration === 1 ? "1 hour" : `${settings.duration} hours`;
+  }
+
+  const getContestDescription = () => {
+    const startDateTime = getFormattedStartDateTime();
+    const duration = getContestDurationText();
+    
+    return `The contest goes live on ${startDateTime} and will be live for ${duration}`;
   }
 
   return (
@@ -69,9 +85,9 @@ export function RulesSection() {
           </div>
           <div className="animate-fade-in-up opacity-0 animate-delay-200">
             <RuleCard
-              highlight="24 hours"
+              highlight={getContestDurationText()}
               title=""
-              description="The contest goes live on DD-MM-YY at HH:MM and will be live for 24 hours"
+              description={getContestDescription()}
             />
           </div>
           <div className="animate-fade-in-up opacity-0 animate-delay-300">

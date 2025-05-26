@@ -9,6 +9,7 @@ import { PrizePool } from "@/components/ui/prize-pool";
 import { LeaderboardSection } from "@/components/ui/leaderboard-section";
 import { DesktopOnly } from "@/components/ui/desktop-only";
 import { useAnimationObserver } from "@/hooks/use-animation-observer";
+import { useLeaderboard } from "@/hooks/use-leaderboard";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { isMobileDevice } from "@/utils/device-detection";
@@ -25,6 +26,9 @@ export default function ScorePage() {
   const [userScore, setUserScore] = useState<UserScore | null>(null);
   const [isPageLoaded, setIsPageLoaded] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+
+  // Fetch real leaderboard data
+  const { allPlayers, isLoading: leaderboardLoading } = useLeaderboard(user?.uid);
 
   // Initialize animation observer
   useAnimationObserver();
@@ -76,20 +80,39 @@ export default function ScorePage() {
     return () => clearTimeout(timer);
   }, []);
 
-  // Mock leaderboard data - replace with real data from your backend
-  const leaderboardPlayers = [
-    { rank: 1, name: "Ikarus7654", score: 8456, avatar: "/images.jpg" },
-    { rank: 2, name: "Ikarus1254", score: 8200, avatar: "/images.jpg" },
-    { rank: 3, name: "Ikarus4483", score: 7786, avatar: "/download.jpg" },
-    { rank: 74, name: "Ikarus4567", score: 5600 },
-    { rank: 75, name: "Ikarus8285", score: 5300 },
-    { rank: 76, name: "Ikarus4875 (You)", score: userScore?.score || 5162, isUser: true },
-    { rank: 77, name: "Ikarus9895", score: 4800 },
-    { rank: 78, name: "Ikarus5684", score: 4600 },
-    { rank: 79, name: "Ikarus3395", score: 4200 },
-  ];
+  // Get display data for leaderboard
+  const getDisplayData = () => {
+    if (leaderboardLoading) {
+      // Return loading data while fetching
+      return {
+        allPlayers: [
+          { rank: 1, name: "Loading...", score: 0 },
+          { rank: 2, name: "Loading...", score: 0 },
+          { rank: 3, name: "Loading...", score: 0 },
+        ]
+      };
+    }
 
-  // Show loading while checking auth
+    if (allPlayers.length === 0) {
+      // Return placeholder data if no one has completed tests yet
+      return {
+        allPlayers: [
+          { rank: 1, name: "Be the first!", score: 0 },
+          { rank: 2, name: "Complete the test", score: 0 },
+          { rank: 3, name: "Join the leaderboard", score: 0 },
+        ]
+      };
+    }
+
+    // Return real data - all players for the full leaderboard
+    return {
+      allPlayers: allPlayers
+    };
+  };
+
+  const { allPlayers: displayAllPlayers } = getDisplayData();
+
+  // Show loading while checking auth or loading leaderboard
   if (loading) {
     return <LoadingAnimation />;
   }
@@ -142,7 +165,7 @@ export default function ScorePage() {
         <div className={`flex-1 max-w-sm sm:max-w-lg lg:max-w-2xl transition-all duration-1000 transform flex flex-col min-h-0 ${isPageLoaded ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-8'}`} style={{ transitionDelay: '400ms' }}>
           <div className="h-full flex flex-col overflow-hidden">
             <LeaderboardSection 
-              players={leaderboardPlayers}
+              players={displayAllPlayers}
               userScore={userScore?.score}
             />
           </div>

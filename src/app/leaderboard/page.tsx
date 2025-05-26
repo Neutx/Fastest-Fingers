@@ -1,12 +1,105 @@
 "use client"
 
+import { useAuth } from "@/components/auth-provider";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { LoadingAnimation } from "@/components/ui/loading";
 import { Header } from "@/components/ui/header";
 import { LeaderboardSection } from "@/components/ui/leaderboard-section";
+import { useAnimationObserver } from "@/hooks/use-animation-observer";
 import { useLeaderboard } from "@/hooks/use-leaderboard";
+import { usePrizePool } from "@/hooks/use-prize-pool";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "@/lib/firebase";
+
+interface UserScore {
+  wpm: number;
+  accuracy: number;
+  score: number;
+}
 
 export default function LeaderboardPage() {
-  const { user, loading, userScore, isPageLoaded, leaderboardPlayers } = useLeaderboard();
+  const { user, loading } = useAuth();
+  const router = useRouter();
+  const [userScore, setUserScore] = useState<UserScore | null>(null);
+  const [isPageLoaded, setIsPageLoaded] = useState(false);
+
+  // Fetch real leaderboard data
+  const { allPlayers, isLoading: leaderboardLoading } = useLeaderboard(user?.uid);
+
+  // Fetch dynamic prize pool data
+  const { totalPrizePool, formattedBreakdown, isLoading: prizePoolLoading } = usePrizePool();
+
+  // Initialize animation observer
+  useAnimationObserver();
+
+  // Redirect to home if not authenticated
+  useEffect(() => {
+    if (!loading && !user) {
+      router.push('/');
+    }
+  }, [user, loading, router]);
+
+  // Fetch user's score data
+  useEffect(() => {
+    const fetchUserScore = async () => {
+      if (user) {
+        try {
+          const userRef = doc(db, 'users', user.uid);
+          const userSnap = await getDoc(userRef);
+          
+          if (userSnap.exists()) {
+            const userData = userSnap.data();
+            if (userData.testResult) {
+              setUserScore({
+                wpm: userData.testResult.wpm || 0,
+                accuracy: userData.testResult.accuracy || 0,
+                score: userData.testResult.score || 0
+              });
+            }
+          }
+        } catch (error) {
+          console.error('Error fetching user score:', error);
+        }
+      }
+    };
+
+    fetchUserScore();
+  }, [user]);
+
+  // Trigger animations after page loads
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsPageLoaded(true);
+    }, 100);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Get real leaderboard data for display
+  const getDisplayData = () => {
+    if (leaderboardLoading) {
+      // Return loading data while fetching
+      return [
+        { rank: 1, name: "Loading...", score: 0 },
+        { rank: 2, name: "Loading...", score: 0 },
+        { rank: 3, name: "Loading...", score: 0 },
+      ];
+    }
+
+    if (allPlayers.length === 0) {
+      // Return placeholder data if no one has completed tests yet
+      return [
+        { rank: 1, name: "Be the first!", score: 0 },
+        { rank: 2, name: "Complete the test", score: 0 },
+        { rank: 3, name: "Join the leaderboard", score: 0 },
+      ];
+    }
+
+    // Return real data - all players for the full leaderboard
+    return allPlayers;
+  };
+
+  const leaderboardPlayers = getDisplayData();
 
   // Show loading while checking auth
   if (loading) {
@@ -40,10 +133,10 @@ export default function LeaderboardPage() {
             {/* Content */}
             <div className="pt-4 sm:pt-6 pb-3 sm:pb-4 px-3 sm:px-6">
               <div className="text-white font-bold text-[28px] sm:text-[42px] leading-none mb-1">
-                ₹10,000
+                ₹{prizePoolLoading ? "10,000" : totalPrizePool.toLocaleString()}
               </div>
               <div className="text-white/50 text-xs sm:text-sm">
-                5000 + 20 × 250
+                {prizePoolLoading ? "5000 + 20 × 250" : formattedBreakdown}
               </div>
             </div>
           </div>
@@ -76,10 +169,10 @@ export default function LeaderboardPage() {
               {/* Content */}
               <div className="pt-8 sm:pt-10 md:pt-12 pb-4 sm:pb-6 md:pb-8 px-4 sm:px-8 md:px-10">
                 <div className="text-white font-bold text-[36px] sm:text-[48px] md:text-[56px] leading-none mb-2 text-center">
-                  ₹10,000
+                  ₹{prizePoolLoading ? "10,000" : totalPrizePool.toLocaleString()}
                 </div>
                 <div className="text-white/50 text-sm sm:text-base md:text-lg text-center">
-                  5000 + 20 × 250
+                  {prizePoolLoading ? "5000 + 20 × 250" : formattedBreakdown}
                 </div>
               </div>
             </div>

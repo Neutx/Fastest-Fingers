@@ -11,5 +11,26 @@ service cloud.firestore {
     match /users/{userId} {
       allow read: if request.auth != null;
     }
+    
+    // Admin access - allow admin to read all user data
+    match /users/{userId} {
+      allow read: if request.auth != null && request.auth.uid == "tDswM9ZXVrdNBok6oZ6fVXkjHyV2";
+    }
+    
+    // Button clicks collection - allow anyone to write, admin to read
+    match /button_clicks/{clickId} {
+      allow create: if true; // Allow anonymous button click tracking
+      allow read: if request.auth != null && request.auth.uid == "tDswM9ZXVrdNBok6oZ6fVXkjHyV2";
+    }
+    
+    // Admin collection - allow admin to read and write contest settings
+    match /admin/{document} {
+      allow read, write: if request.auth != null && request.auth.uid == "tDswM9ZXVrdNBok6oZ6fVXkjHyV2";
+    }
+    
+    // Allow everyone to read contest settings for countdown timer (including unauthenticated users)
+    match /admin/contestSettings {
+      allow read: if true;
+    }
   }
 }

@@ -1,93 +1,89 @@
-import { useAuth } from "@/components/auth-provider";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { useAnimationObserver } from "@/hooks/use-animation-observer";
-import { doc, getDoc } from "firebase/firestore";
-import { db } from "@/lib/firebase";
+"use client"
 
-interface UserScore {
-  wpm: number;
-  accuracy: number;
-  score: number;
-}
+import { useState, useEffect } from "react"
+import { collection, query, getDocs, } from "firebase/firestore"
+import { db } from "@/lib/firebase"
+import { LeaderboardPlayer } from "@/types/leaderboard"
 
-interface LeaderboardPlayer {
-  rank: number;
-  name: string;
-  score: number;
-  avatar?: string;
-  isUser?: boolean;
-}
+export function useLeaderboard(currentUserUid?: string) {
+  const [topPlayers, setTopPlayers] = useState<LeaderboardPlayer[]>([])
+  const [allPlayers, setAllPlayers] = useState<LeaderboardPlayer[]>([])
+  const [userRank, setUserRank] = useState<number | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
 
-export function useLeaderboard() {
-  const { user, loading } = useAuth();
-  const router = useRouter();
-  const [userScore, setUserScore] = useState<UserScore | null>(null);
-  const [isPageLoaded, setIsPageLoaded] = useState(false);
-
-  // Initialize animation observer
-  useAnimationObserver();
-
-  // Redirect to home if not authenticated
   useEffect(() => {
-    if (!loading && !user) {
-      router.push('/');
-    }
-  }, [user, loading, router]);
-
-  // Fetch user's score data
-  useEffect(() => {
-    const fetchUserScore = async () => {
-      if (user) {
-        try {
-          const userRef = doc(db, 'users', user.uid);
-          const userSnap = await getDoc(userRef);
+    const fetchLeaderboard = async () => {
+      try {
+        setIsLoading(true)
+        
+        // Query to get all users, we'll filter completed tests in code
+        const usersRef = collection(db, 'users')
+        const q = query(usersRef)
+        
+        const querySnapshot = await getDocs(q)
+        
+        const players: LeaderboardPlayer[] = []
+        let currentUserRank: number | null = null
+        
+        querySnapshot.forEach((doc) => {
+          const userData = doc.data()
+          const testResult = userData.testResult
           
-          if (userSnap.exists()) {
-            const userData = userSnap.data();
-            if (userData.testResult) {
-              setUserScore({
-                wpm: userData.testResult.wpm || 0,
-                accuracy: userData.testResult.accuracy || 0,
-                score: userData.testResult.score || 0
-              });
+          if (testResult && testResult.score !== undefined && testResult.score > 0) {
+            const player: LeaderboardPlayer = {
+              rank: 0, // Will be set after sorting
+              name: userData.displayName || userData.email?.split('@')[0] || 'Anonymous',
+              score: testResult.score,
+              avatar: userData.photoURL,
+              isUser: doc.id === currentUserUid,
+              uid: doc.id
             }
+            
+            players.push(player)
           }
-        } catch (error) {
-          console.error('Error fetching user score:', error);
-        }
+        })
+        
+        // Sort players by score in descending order
+        players.sort((a, b) => b.score - a.score)
+        
+        // Assign ranks and find current user's rank
+        players.forEach((player, index) => {
+          player.rank = index + 1
+          if (player.uid === currentUserUid) {
+            currentUserRank = index + 1
+          }
+        })
+        
+        setAllPlayers(players)
+        setTopPlayers(players.slice(0, 3)) // Top 3 for podium
+        setUserRank(currentUserRank)
+        
+      } catch (error) {
+        console.error('Error fetching leaderboard:', error)
+      } finally {
+        setIsLoading(false)
       }
-    };
+    }
 
-    fetchUserScore();
-  }, [user]);
+    fetchLeaderboard()
+  }, [currentUserUid])
 
-  // Trigger animations after page loads
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsPageLoaded(true);
-    }, 100);
-    return () => clearTimeout(timer);
-  }, []);
-
-  // Mock leaderboard data - replace with real data from your backend
-  const leaderboardPlayers: LeaderboardPlayer[] = [
-    { rank: 1, name: "Ikarus7654", score: 8456, avatar: "/images.jpg" },
-    { rank: 2, name: "Ikarus1254", score: 8200, avatar: "/images.jpg" },
-    { rank: 3, name: "Ikarus4483", score: 7786, avatar: "/download.jpg" },
-    { rank: 74, name: "Ikarus4567", score: 5600 },
-    { rank: 75, name: "Ikarus8285", score: 5300 },
-    { rank: 76, name: "Ikarus4875 (You)", score: userScore?.score || 5162, isUser: true },
-    { rank: 77, name: "Ikarus9895", score: 4800 },
-    { rank: 78, name: "Ikarus5684", score: 4600 },
-    { rank: 79, name: "Ikarus3395", score: 4200 },
-  ];
+  const getUserSurroundings = (contextSize: number = 3): LeaderboardPlayer[] => {
+    if (!userRank || allPlayers.length === 0) return []
+    
+    const userIndex = userRank - 1
+    const start = Math.max(0, userIndex - contextSize)
+    const end = Math.min(allPlayers.length, userIndex + contextSize + 1)
+    
+    return allPlayers.slice(start, end)
+  }
 
   return {
-    user,
-    loading,
-    userScore,
-    isPageLoaded,
-    leaderboardPlayers
-  };
+    topPlayers,
+    allPlayers,
+    userRank,
+    isLoading,
+    getUserSurroundings,
+    totalPlayers: allPlayers.length
+  }
 } 

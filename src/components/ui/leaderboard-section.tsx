@@ -1,12 +1,5 @@
 import { LeaderboardPodium } from "./leaderboard-podium";
-
-interface LeaderboardPlayer {
-  rank: number;
-  name: string;
-  score: number;
-  avatar?: string;
-  isUser?: boolean;
-}
+import { LeaderboardPlayer } from "@/types/leaderboard";
 
 interface LeaderboardSectionProps {
   players: LeaderboardPlayer[];
@@ -22,8 +15,8 @@ export function LeaderboardSection({ players }: LeaderboardSectionProps) {
 
   return (
     <div className="w-full h-full flex flex-col relative">
-      {/* Podium Section - Top Aligned */}
-      <div className="flex-1 flex items-start justify-center relative z-20 px-2 sm:px-4">
+      {/* Podium Section - Centered */}
+      <div className="flex-1 flex items-center justify-center relative z-20 px-2 sm:px-4">
         <LeaderboardPodium topPlayers={topThree} />
       </div>
 

@@ -71,7 +71,7 @@ export function PrizesSection() {
           </div>
           <div className="animate-fade-in-up opacity-0 animate-delay-200">
             <PrizeCard
-              title="#The other winner aka the lucky ba^%ard"
+              title="#The other winner aka the lucky bastard"
               description="Wins the all new Kreo Hive 65 by participating in the giveaway at the end of the typing challenge. Life's unfair."
             />
           </div>
