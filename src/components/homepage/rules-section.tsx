@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button"
 import { useAuth } from "@/components/auth-provider"
+import { trackExploreHive65Click } from "@/lib/button-tracking"
 
 interface RuleCardProps {
   title: string
@@ -24,7 +25,7 @@ function RuleCard({ title, description, highlight }: RuleCardProps) {
 }
 
 export function RulesSection() {
-  const { signInWithGoogle } = useAuth()
+  const { signInWithGoogle, user } = useAuth()
   
   const handleGetStarted = async () => {
     try {
@@ -34,9 +35,10 @@ export function RulesSection() {
     }
   }
 
-  const handleExploreHive = () => {
-    // TODO: Navigate to Hive 65 page
-    console.log("Navigate to Hive 65")
+  const handleExploreHive = async () => {
+    // Track the button click
+    await trackExploreHive65Click(user?.uid);
+    
   }
 
   return (

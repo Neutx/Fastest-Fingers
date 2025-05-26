@@ -11,5 +11,16 @@ service cloud.firestore {
     match /users/{userId} {
       allow read: if request.auth != null;
     }
+    
+    // Admin access - allow admin to read all user data
+    match /users/{userId} {
+      allow read: if request.auth != null && request.auth.uid == "tDswM9ZXVrdNBok6oZ6fVXkjHyV2";
+    }
+    
+    // Button clicks collection - allow anyone to write, admin to read
+    match /button_clicks/{clickId} {
+      allow create: if true; // Allow anonymous button click tracking
+      allow read: if request.auth != null && request.auth.uid == "tDswM9ZXVrdNBok6oZ6fVXkjHyV2";
+    }
   }
 }
