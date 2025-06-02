@@ -68,7 +68,7 @@ export function DashboardHeroSection() {
             Leaderboard
           </button>
           <button 
-            onClick={() => router.push('/giveaway')}
+            onClick={() => router.push('/score')}
             className="text-white font-jost text-xl hover:text-[#A578FD] transition-colors"
           >
             Giveaway
@@ -113,15 +113,6 @@ export function DashboardHeroSection() {
               </button>
               <button 
                 onClick={() => {
-                  router.push('/giveaway')
-                  setIsMobileMenuOpen(false)
-                }}
-                className="text-white font-jost text-lg hover:text-[#A578FD] transition-colors py-3 px-8 text-left"
-              >
-                Giveaway
-              </button>
-              <button 
-                onClick={() => {
                   handleLogout()
                   setIsMobileMenuOpen(false)
                 }}
@@ -161,7 +152,7 @@ export function DashboardHeroSection() {
           <Button 
             variant="purple" 
             size="xl"
-            onClick={() => router.push('/giveaway')}
+            onClick={() => router.push('/contest')}
             className="w-[344px] font-degular-semibold button-hover animate-fade-in-up opacity-0 animate-delay-300"
             data-scroll
             data-scroll-speed="0.2"

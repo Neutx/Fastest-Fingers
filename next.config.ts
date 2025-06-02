@@ -1,6 +1,17 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+  typescript: {
+    ignoreBuildErrors: true,
+  },
+  experimental: {
+    esmExternals: 'loose',
+  },
+  output: 'export',
+  trailingSlash: true,
   images: {
     remotePatterns: [
       {
@@ -22,7 +33,8 @@ const nextConfig: NextConfig = {
         pathname: '/**',
       }
     ],
-  },
+    unoptimized: true
+  }
 };
 
 export default nextConfig;

@@ -13,6 +13,11 @@ export function useLeaderboard(currentUserUid?: string) {
 
   useEffect(() => {
     const fetchLeaderboard = async () => {
+      if (!currentUserUid) {
+        setIsLoading(false)
+        return
+      }
+
       try {
         setIsLoading(true)
         
@@ -60,6 +65,9 @@ export function useLeaderboard(currentUserUid?: string) {
         
       } catch (error) {
         console.error('Error fetching leaderboard:', error)
+        setAllPlayers([])
+        setTopPlayers([])
+        setUserRank(null)
       } finally {
         setIsLoading(false)
       }

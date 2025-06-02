@@ -8,8 +8,11 @@ export function useAnimationObserver() {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
           const target = entry.target as HTMLElement;
-          target.style.opacity = '1';
-          target.style.animation = target.style.animation || 'fadeInUp 0.8s ease-out forwards';
+          
+          requestAnimationFrame(() => {
+            target.style.opacity = '1';
+            target.style.transform = 'translateY(0)';
+          });
         }
       });
     };
@@ -19,12 +22,16 @@ export function useAnimationObserver() {
       rootMargin: '0px 0px -50px 0px'
     });
 
-    // Observe all elements with fade-in animation
-    const animatedElements = document.querySelectorAll('.animate-fade-in-up');
-    animatedElements.forEach((el) => observer.observe(el));
+    // Use a timeout to ensure DOM is ready
+    const timeoutId = setTimeout(() => {
+      // Observe all elements with fade-in animation
+      const animatedElements = document.querySelectorAll('.animate-fade-in-up');
+      animatedElements.forEach((el) => observer.observe(el));
+    }, 100);
 
     return () => {
-      animatedElements.forEach((el) => observer.unobserve(el));
+      clearTimeout(timeoutId);
+      observer.disconnect();
     };
   }, []);
 } 

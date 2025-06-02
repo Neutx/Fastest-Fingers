@@ -1,6 +1,12 @@
 "use client"
 
+import { usePrizePool } from "@/hooks/use-prize-pool";
+import { useAuth } from "@/components/auth-provider";
+
 export function DashboardPrizePool() {
+  const { user } = useAuth();
+  const { totalPrizePool, formattedBreakdown, isLoading } = usePrizePool(user?.uid);
+
   return (
     <section 
       className="bg-black py-16 px-4 flex justify-center items-center"
@@ -21,10 +27,10 @@ export function DashboardPrizePool() {
         {/* Content */}
         <div className="pt-12 pb-8 px-12">
           <div className="text-white font-bold text-[72px] leading-none mb-3 text-center">
-            ₹10,000
+            ₹{isLoading ? "5,000" : totalPrizePool.toLocaleString()}
           </div>
           <div className="text-white/60 text-xl text-center">
-            5000 + 20 × 250
+            {isLoading ? "5000 + 20 × 250" : formattedBreakdown}
           </div>
         </div>
       </div>

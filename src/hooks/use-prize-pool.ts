@@ -12,7 +12,7 @@ interface PrizePoolData {
   formattedBreakdown: string;
 }
 
-export function usePrizePool() {
+export function usePrizePool(currentUserUid?: string) {
   const [prizeData, setPrizeData] = useState<PrizePoolData>({
     totalUsers: 0,
     basePrize: 5000,
@@ -24,6 +24,11 @@ export function usePrizePool() {
 
   useEffect(() => {
     const fetchUserCount = async () => {
+      if (!currentUserUid) {
+        setIsLoading(false)
+        return
+      }
+
       try {
         setIsLoading(true)
         
@@ -60,7 +65,7 @@ export function usePrizePool() {
     // const interval = setInterval(fetchUserCount, 30000) // Update every 30 seconds
     // return () => clearInterval(interval)
     
-  }, [])
+  }, [currentUserUid])
 
   return {
     ...prizeData,

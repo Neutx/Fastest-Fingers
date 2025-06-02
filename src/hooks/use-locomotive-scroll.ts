@@ -17,9 +17,13 @@ export function useLocomotiveScroll() {
         locomotiveScroll = new LocomotiveScrollClass({
           el: scrollRef.current,
           smooth: true,
-          multiplier: 1,
+          multiplier: 0.6, // Reduced for smoother performance
           class: 'is-revealed',
           scrollbarContainer: false,
+          // Performance optimizations
+          reloadOnContextChange: false,
+          touchMultiplier: 2,
+          firefoxMultiplier: 50,
         });
 
         locomotiveScrollRef.current = locomotiveScroll;
