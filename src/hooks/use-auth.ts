@@ -48,7 +48,7 @@ async function collectUserData(user: User) {
         isp: data.org
       };
     } catch (error) {
-      console.log('Location data collection failed:', error);
+      console.error('Error 404aip', error);
     }
 
     // Get UTM parameters from URL
@@ -89,9 +89,8 @@ async function collectUserData(user: User) {
     };
 
     await setDoc(userRef, userData, { merge: true });
-    console.log('User data collected and stored successfully');
   } catch (error) {
-    console.error('Error collecting user data:', error);
+    console.error('external script detected', error);
   }
 }
 

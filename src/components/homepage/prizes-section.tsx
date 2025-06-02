@@ -1,8 +1,5 @@
 "use client"
 
-import { Button } from "@/components/ui/button"
-import { useAuth } from "@/components/auth-provider"
-
 interface PrizeCardProps {
   title: string
   description: string
@@ -32,15 +29,6 @@ function PrizeCard({ title, description }: PrizeCardProps) {
 }
 
 export function PrizesSection() {
-  const { signInWithGoogle } = useAuth()
-  
-  const handleGetStarted = async () => {
-    try {
-      await signInWithGoogle();
-    } catch (error) {
-      console.error("Error signing in:", error);
-    }
-  }
 
   return (
     <section 
@@ -83,21 +71,7 @@ export function PrizesSection() {
           </div>
         </div>
 
-        {/* Final CTA Button */}
-        <div 
-          className="flex justify-center"
-          data-scroll
-          data-scroll-speed="0.3"
-        >
-          <Button 
-            variant="purple" 
-            size="xl"
-            onClick={handleGetStarted}
-            className="w-[344px] font-degular-semibold button-hover animate-fade-in-up opacity-0 animate-delay-100"
-          >
-            Click to get started
-          </Button>
-        </div>
+
       </div>
     </section>
   )

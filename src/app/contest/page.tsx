@@ -39,7 +39,20 @@ export default function ContestPage() {
 
   // Check if device is mobile
   useEffect(() => {
-    setIsMobile(isMobileDevice());
+    const checkMobile = () => {
+      setIsMobile(isMobileDevice());
+    };
+
+    // Check on mount
+    checkMobile();
+
+    // Add resize listener
+    window.addEventListener('resize', checkMobile);
+
+    // Cleanup
+    return () => {
+      window.removeEventListener('resize', checkMobile);
+    };
   }, []);
 
   // Redirect to home if not authenticated
@@ -127,7 +140,32 @@ export default function ContestPage() {
   // Handle keyboard input
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (showRules) return; // Don't handle input when rules modal is open
+      if (showRules) return;
+      
+      if (
+        event.key === 'Control' ||
+        event.key === 'Shift' ||
+        event.key === 'Tab' ||
+        event.key === 'Alt' ||
+        event.key === 'Meta' ||
+        event.key === 'CapsLock' ||
+        event.key === 'Escape' ||
+        event.key === 'F1' || event.key === 'F2' || event.key === 'F3' || event.key === 'F4' ||
+        event.key === 'F5' || event.key === 'F6' || event.key === 'F7' || event.key === 'F8' ||
+        event.key === 'F9' || event.key === 'F10' || event.key === 'F11' || event.key === 'F12' ||
+        event.key === 'Insert' ||
+        event.key === 'Delete' ||
+        event.key === 'Home' ||
+        event.key === 'End' ||
+        event.key === 'PageUp' ||
+        event.key === 'PageDown' ||
+        event.key === 'ArrowUp' ||
+        event.key === 'ArrowDown' ||
+        event.key === 'ArrowLeft' ||
+        event.key === 'ArrowRight'
+      ) {
+        return;
+      }
       
       event.preventDefault();
       handleKeyPress(event.key);
@@ -166,7 +204,7 @@ export default function ContestPage() {
           />
           <nav className="flex items-center gap-8">
             <button 
-              onClick={() => router.push('/contest')}
+              onClick={() => router.push('/homepage')}
               className="text-[#A578FD] font-jost text-xl"
             >
               Home
@@ -278,9 +316,6 @@ export default function ContestPage() {
         {/* Test Completion Message */}
         {isTestCompleted && (
           <div className="text-center mt-8">
-            <h2 className="text-[#A578FD] font-faster-one text-4xl mb-4">
-              Test Completed!
-            </h2>
             <p className="text-white font-jost text-xl">
               Redirecting to your score page...
             </p>

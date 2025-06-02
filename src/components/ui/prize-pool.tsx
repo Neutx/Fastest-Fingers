@@ -1,10 +1,12 @@
 import { usePrizePool } from "@/hooks/use-prize-pool";
+import { useAuth } from "@/components/auth-provider";
 
 export function PrizePool() {
-  const { totalPrizePool, formattedBreakdown, isLoading } = usePrizePool();
+  const { user } = useAuth();
+  const { totalPrizePool, formattedBreakdown, isLoading } = usePrizePool(user?.uid);
 
   return (
-    <div className="absolute right-0 top-1/2 transform translate-x-[-375%] -translate-y-[-110%] z-0">
+    <div className="absolute right-0 top-1/2 transform translate-x-[-390%] -translate-y-[-50%] z-0">
       <div className="relative border border-white/30 rounded-lg bg-black/20 backdrop-blur-sm hover-pop">
         {/* Red Label */}
         <div className="absolute -top-3 right-4">

@@ -28,7 +28,7 @@ export default function LeaderboardPage() {
   const { allPlayers, isLoading: leaderboardLoading } = useLeaderboard(user?.uid);
 
   // Fetch dynamic prize pool data
-  const { totalPrizePool, formattedBreakdown, isLoading: prizePoolLoading } = usePrizePool();
+  const { totalPrizePool, formattedBreakdown, isLoading: prizePoolLoading } = usePrizePool(user?.uid);
 
   // Initialize animation observer
   useAnimationObserver();

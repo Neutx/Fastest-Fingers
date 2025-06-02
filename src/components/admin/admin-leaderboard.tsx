@@ -73,38 +73,50 @@ export function AdminLeaderboard({ users }: AdminLeaderboardProps) {
       </div>
 
       {/* Top 3 Podium */}
-      {leaderboardUsers.length >= 3 && (
+      {leaderboardUsers.length > 0 && (
         <div className="bg-gray-900 rounded-lg p-6 border border-gray-800">
-          <h3 className="text-lg font-semibold text-white mb-4 text-center">🥇 Top 3 Champions</h3>
-          <div className="flex justify-center items-end gap-4">
+          <h3 className="text-lg font-semibold text-white mb-6 text-center">🥇 Top 3 Champions</h3>
+          <div className="flex justify-center items-end gap-8 max-w-md mx-auto">
             {/* 2nd Place */}
-            <div className="text-center">
-              <div className="w-16 h-16 bg-gradient-to-b from-gray-400 to-gray-600 rounded-full flex items-center justify-center mb-2">
+            <div className="text-center flex-1">
+              <div className={`w-16 h-16 bg-gradient-to-b ${leaderboardUsers[1] ? 'from-gray-400 to-gray-600' : 'from-gray-600 to-gray-800'} rounded-full flex items-center justify-center mb-3 mx-auto ${!leaderboardUsers[1] ? 'opacity-50' : ''}`}>
                 <Trophy className="text-white" size={24} />
               </div>
-              <div className="text-white font-medium text-sm">{leaderboardUsers[1]?.displayName}</div>
-              <div className="text-gray-400 text-xs">{leaderboardUsers[1]?.bestScore}</div>
-              <div className="text-xs text-gray-500 mt-1">2nd</div>
+              <div className={`font-medium text-sm mb-1 ${leaderboardUsers[1] ? 'text-white' : 'text-gray-500'}`}>
+                {leaderboardUsers[1]?.displayName || "Join the contest!"}
+              </div>
+              <div className="text-gray-400 text-xs mb-1">
+                {leaderboardUsers[1]?.bestScore || "---"}
+              </div>
+              <div className="text-xs text-gray-500">2nd</div>
             </div>
 
             {/* 1st Place */}
-            <div className="text-center">
-              <div className="w-20 h-20 bg-gradient-to-b from-yellow-400 to-yellow-600 rounded-full flex items-center justify-center mb-2">
+            <div className="text-center flex-1">
+              <div className={`w-20 h-20 bg-gradient-to-b ${leaderboardUsers[0] ? 'from-yellow-400 to-yellow-600' : 'from-gray-600 to-gray-800'} rounded-full flex items-center justify-center mb-3 mx-auto ${!leaderboardUsers[0] ? 'opacity-50' : ''}`}>
                 <Crown className="text-white" size={28} />
               </div>
-              <div className="text-white font-bold">{leaderboardUsers[0]?.displayName}</div>
-              <div className="text-yellow-400 font-bold">{leaderboardUsers[0]?.bestScore}</div>
-              <div className="text-xs text-yellow-400 mt-1">1st</div>
+              <div className={`font-bold mb-1 ${leaderboardUsers[0] ? 'text-white' : 'text-gray-500'}`}>
+                {leaderboardUsers[0]?.displayName || "Be the first!"}
+              </div>
+              <div className={`font-bold mb-1 ${leaderboardUsers[0] ? 'text-yellow-400' : 'text-gray-500'}`}>
+                {leaderboardUsers[0]?.bestScore || "---"}
+              </div>
+              <div className="text-xs text-yellow-400">1st</div>
             </div>
 
             {/* 3rd Place */}
-            <div className="text-center">
-              <div className="w-16 h-16 bg-gradient-to-b from-amber-600 to-amber-800 rounded-full flex items-center justify-center mb-2">
+            <div className="text-center flex-1">
+              <div className={`w-16 h-16 bg-gradient-to-b ${leaderboardUsers[2] ? 'from-amber-600 to-amber-800' : 'from-gray-600 to-gray-800'} rounded-full flex items-center justify-center mb-3 mx-auto ${!leaderboardUsers[2] ? 'opacity-50' : ''}`}>
                 <Medal className="text-white" size={24} />
               </div>
-              <div className="text-white font-medium text-sm">{leaderboardUsers[2]?.displayName}</div>
-              <div className="text-gray-400 text-xs">{leaderboardUsers[2]?.bestScore}</div>
-              <div className="text-xs text-gray-500 mt-1">3rd</div>
+              <div className={`font-medium text-sm mb-1 ${leaderboardUsers[2] ? 'text-white' : 'text-gray-500'}`}>
+                {leaderboardUsers[2]?.displayName || "Be next!"}
+              </div>
+              <div className="text-gray-400 text-xs mb-1">
+                {leaderboardUsers[2]?.bestScore || "---"}
+              </div>
+              <div className="text-xs text-gray-500">3rd</div>
             </div>
           </div>
         </div>

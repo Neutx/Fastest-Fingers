@@ -126,29 +126,41 @@ body {
   border-color: rgba(165, 120, 253, 0.6);
 }
 
-/* Parallax Elements */
+/* Parallax Elements - Performance optimized */
 .parallax-slow {
   will-change: transform;
+  backface-visibility: hidden;
+  perspective: 1000px;
+  transform: translate3d(0, 0, 0);
 }
 
 .parallax-fast {
   will-change: transform;
+  backface-visibility: hidden;
+  perspective: 1000px;
+  transform: translate3d(0, 0, 0);
 }
 
-/* Fade In Animations */
+/* Fade In Animations - Optimized for performance */
 @keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(60px);
+    transform: translate3d(0, 60px, 0);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translate3d(0, 0, 0);
   }
 }
 
 .animate-fade-in-up {
+  opacity: 0;
+  transform: translate3d(0, 60px, 0);
   animation: fadeInUp 0.8s ease-out forwards;
+  /* Performance optimizations */
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  perspective: 1000px;
 }
 
 .animate-delay-100 {

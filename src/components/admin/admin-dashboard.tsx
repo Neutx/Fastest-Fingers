@@ -3,11 +3,12 @@
 import { useState } from "react";
 import { SimpleUsersTable } from "./simple-users-table";
 import { AdminLeaderboard } from "./admin-leaderboard";
+import { AdminSettings } from "./admin-settings";
 import Image from "next/image";
 import { UserData } from "@/types/admin";
 import { ExportButton } from "./export-button";
 import { StatsCards } from "./stats-cards";
-import { Users, Trophy } from "lucide-react";
+import { Users, Trophy, Settings } from "lucide-react";
 
 interface AdminDashboardProps {
   users: UserData[];
@@ -15,7 +16,7 @@ interface AdminDashboardProps {
 
 export function AdminDashboard({ users }: AdminDashboardProps) {
   const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
-  const [activeTab, setActiveTab] = useState<'users' | 'leaderboard'>('users');
+  const [activeTab, setActiveTab] = useState<'users' | 'leaderboard' | 'settings'>('users');
 
   return (
     <div className="min-h-screen bg-black text-white">
@@ -71,6 +72,17 @@ export function AdminDashboard({ users }: AdminDashboardProps) {
             <Trophy size={16} />
             Leaderboard
           </button>
+          <button
+            onClick={() => setActiveTab('settings')}
+            className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+              activeTab === 'settings'
+                ? 'bg-[#A578FD] text-white'
+                : 'text-gray-400 hover:text-white hover:bg-gray-700'
+            }`}
+          >
+            <Settings size={16} />
+            Settings
+          </button>
         </div>
 
         {/* Tab Content */}
@@ -90,8 +102,10 @@ export function AdminDashboard({ users }: AdminDashboardProps) {
               onSelectionChange={setSelectedUsers}
             />
           </div>
-        ) : (
+        ) : activeTab === 'leaderboard' ? (
           <AdminLeaderboard users={users} />
+        ) : (
+          <AdminSettings />
         )}
       </div>
     </div>

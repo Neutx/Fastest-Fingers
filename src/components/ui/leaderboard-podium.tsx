@@ -6,8 +6,29 @@ interface LeaderboardPodiumProps {
 }
 
 export function LeaderboardPodium({ topPlayers }: LeaderboardPodiumProps) {
-  // Ensure we have exactly 3 players for the podium
-  const [first, second, third] = topPlayers.slice(0, 3);
+  // Ensure we have exactly 3 players for the podium, with placeholders for missing ones
+  const getPlayerOrPlaceholder = (index: number, rank: number): LeaderboardPlayer | null => {
+    if (topPlayers[index]) {
+      return topPlayers[index];
+    }
+    
+    // Return placeholder for missing players
+    if (topPlayers.length > 0) { // Only show placeholders if there's at least one real player
+      return {
+        rank,
+        name: rank === 2 ? "Join the contest!" : "Be next!",
+        score: 0,
+        avatar: undefined,
+        isUser: false
+      };
+    }
+    
+    return null;
+  };
+
+  const first = getPlayerOrPlaceholder(0, 1);
+  const second = getPlayerOrPlaceholder(1, 2);
+  const third = getPlayerOrPlaceholder(2, 3);
 
   return (
     <>
@@ -62,25 +83,25 @@ export function LeaderboardPodium({ topPlayers }: LeaderboardPodiumProps) {
           <>
             {/* Avatar */}
             <div 
-              className="absolute rounded-full overflow-hidden"
+              className={`absolute rounded-full overflow-hidden ${first.score === 0 ? 'opacity-50' : ''}`}
               style={{
                 width: '120.99px',
                 height: '120.99px',
                 left: '191.82px', // Centered
                 top: '34.74px',
-                border: '4.42651px solid #A578FD'
+                border: `4.42651px solid ${first.score === 0 ? '#666' : '#A578FD'}`
               }}
             >
               {first.avatar ? (
                 <Image src={first.avatar} alt={first.name} width={121} height={121} className="w-full h-full object-cover" />
               ) : (
-                <div className="w-full h-full bg-gradient-to-b from-purple-400 to-purple-600"></div>
+                <div className={`w-full h-full ${first.score === 0 ? 'bg-gradient-to-b from-gray-400 to-gray-600' : 'bg-gradient-to-b from-purple-400 to-purple-600'}`}></div>
               )}
             </div>
 
             {/* Rank badge */}
             <div 
-              className="absolute bg-[#A578FD] flex items-center justify-center"
+              className={`absolute ${first.score === 0 ? 'bg-gray-500' : 'bg-[#A578FD]'} flex items-center justify-center`}
               style={{
                 width: '25.08px',
                 height: '25.08px',
@@ -104,7 +125,7 @@ export function LeaderboardPodium({ topPlayers }: LeaderboardPodiumProps) {
 
             {/* Name */}
             <div 
-              className="absolute text-white font-medium truncate"
+              className={`absolute ${first.score === 0 ? 'text-gray-400' : 'text-white'} font-medium truncate`}
               style={{
                 left: '180px',
                 top: '201.03px',
@@ -120,7 +141,7 @@ export function LeaderboardPodium({ topPlayers }: LeaderboardPodiumProps) {
 
             {/* Score */}
             <div 
-              className="absolute text-[#A578FD] font-bold"
+              className={`absolute ${first.score === 0 ? 'text-gray-500' : 'text-[#A578FD]'} font-bold`}
               style={{
                 left: '180px',
                 top: '232.15px',
@@ -131,7 +152,7 @@ export function LeaderboardPodium({ topPlayers }: LeaderboardPodiumProps) {
                 textAlign: 'center'
               }}
             >
-              {first.score}
+              {first.score === 0 ? '---' : first.score}
             </div>
           </>
         )}
@@ -141,25 +162,25 @@ export function LeaderboardPodium({ topPlayers }: LeaderboardPodiumProps) {
           <>
             {/* Avatar */}
             <div 
-              className="absolute rounded-full overflow-hidden"
+              className={`absolute rounded-full overflow-hidden ${second.score === 0 ? 'opacity-50' : ''}`}
               style={{
                 width: '100.33px',
                 height: '100.33px',
                 left: '31.92px',
                 top: '115.89px',
-                border: '4.42651px solid #009BD6'
+                border: `4.42651px solid ${second.score === 0 ? '#666' : '#009BD6'}`
               }}
             >
               {second.avatar ? (
                 <Image src={second.avatar} alt={second.name} width={100} height={100} className="w-full h-full object-cover" />
               ) : (
-                <div className="w-full h-full bg-gradient-to-b from-blue-400 to-blue-600"></div>
+                <div className={`w-full h-full ${second.score === 0 ? 'bg-gradient-to-b from-gray-400 to-gray-600' : 'bg-gradient-to-b from-blue-400 to-blue-600'}`}></div>
               )}
             </div>
 
             {/* Rank badge */}
             <div 
-              className="absolute bg-[#009BD6] flex items-center justify-center"
+              className={`absolute ${second.score === 0 ? 'bg-gray-500' : 'bg-[#009BD6]'} flex items-center justify-center`}
               style={{
                 width: '25.08px',
                 height: '25.08px',
@@ -183,7 +204,7 @@ export function LeaderboardPodium({ topPlayers }: LeaderboardPodiumProps) {
 
             {/* Name */}
             <div 
-              className="absolute text-white font-medium truncate"
+              className={`absolute ${second.score === 0 ? 'text-gray-400' : 'text-white'} font-medium truncate`}
               style={{
                 left: '10px',
                 top: '241.31px',
@@ -199,7 +220,7 @@ export function LeaderboardPodium({ topPlayers }: LeaderboardPodiumProps) {
 
             {/* Score */}
             <div 
-              className="absolute text-[#009BD6] font-bold"
+              className={`absolute ${second.score === 0 ? 'text-gray-500' : 'text-[#009BD6]'} font-bold`}
               style={{
                 left: '10px',
                 top: '267px',
@@ -210,7 +231,7 @@ export function LeaderboardPodium({ topPlayers }: LeaderboardPodiumProps) {
                 textAlign: 'center'
               }}
             >
-              {second.score}
+              {second.score === 0 ? '---' : second.score}
             </div>
           </>
         )}
@@ -220,25 +241,25 @@ export function LeaderboardPodium({ topPlayers }: LeaderboardPodiumProps) {
           <>
             {/* Avatar */}
             <div 
-              className="absolute rounded-full overflow-hidden"
+              className={`absolute rounded-full overflow-hidden ${third.score === 0 ? 'opacity-50' : ''}`}
               style={{
                 width: '100.33px',
                 height: '100.33px',
                 left: '373.24px',
                 top: '112.94px',
-                border: '4.42651px solid #00D95F'
+                border: `4.42651px solid ${third.score === 0 ? '#666' : '#00D95F'}`
               }}
             >
               {third.avatar ? (
                 <Image src={third.avatar} alt={third.name} width={100} height={100} className="w-full h-full object-cover" />
               ) : (
-                <div className="w-full h-full bg-gradient-to-b from-green-400 to-green-600"></div>
+                <div className={`w-full h-full ${third.score === 0 ? 'bg-gradient-to-b from-gray-400 to-gray-600' : 'bg-gradient-to-b from-green-400 to-green-600'}`}></div>
               )}
             </div>
 
             {/* Rank badge */}
             <div 
-              className="absolute bg-[#00D95F] flex items-center justify-center"
+              className={`absolute ${third.score === 0 ? 'bg-gray-500' : 'bg-[#00D95F]'} flex items-center justify-center`}
               style={{
                 width: '25.08px',
                 height: '25.08px',
@@ -262,7 +283,7 @@ export function LeaderboardPodium({ topPlayers }: LeaderboardPodiumProps) {
 
             {/* Name */}
             <div 
-              className="absolute text-white font-medium truncate"
+              className={`absolute ${third.score === 0 ? 'text-gray-400' : 'text-white'} font-medium truncate`}
               style={{
                 left: '360px',
                 top: '236.88px',
@@ -278,7 +299,7 @@ export function LeaderboardPodium({ topPlayers }: LeaderboardPodiumProps) {
 
             {/* Score */}
             <div 
-              className="absolute text-[#00D95F] font-bold"
+              className={`absolute ${third.score === 0 ? 'text-gray-500' : 'text-[#00D95F]'} font-bold`}
               style={{
                 left: '360px',
                 top: '272px',
@@ -289,7 +310,7 @@ export function LeaderboardPodium({ topPlayers }: LeaderboardPodiumProps) {
                 textAlign: 'center'
               }}
             >
-              {third.score}
+              {third.score === 0 ? '---' : third.score}
             </div>
           </>
         )}
@@ -345,7 +366,7 @@ export function LeaderboardPodium({ topPlayers }: LeaderboardPodiumProps) {
           <>
             {/* Avatar */}
             <div 
-              className="absolute rounded-full overflow-hidden border-2 sm:border-4 border-[#A578FD]"
+              className={`absolute rounded-full overflow-hidden border-2 sm:border-4 ${first.score === 0 ? 'border-gray-400 opacity-50' : 'border-[#A578FD]'}`}
               style={{
                 width: '24%',
                 height: '38%',
@@ -356,13 +377,13 @@ export function LeaderboardPodium({ topPlayers }: LeaderboardPodiumProps) {
               {first.avatar ? (
                 <Image src={first.avatar} alt={first.name} width={121} height={121} className="w-full h-full object-cover" />
               ) : (
-                <div className="w-full h-full bg-gradient-to-b from-purple-400 to-purple-600"></div>
+                <div className={`w-full h-full ${first.score === 0 ? 'bg-gradient-to-b from-gray-400 to-gray-600' : 'bg-gradient-to-b from-purple-400 to-purple-600'}`}></div>
               )}
             </div>
 
             {/* Rank badge */}
             <div 
-              className="absolute bg-[#A578FD] flex items-center justify-center rounded"
+              className={`absolute ${first.score === 0 ? 'bg-gray-500' : 'bg-[#A578FD]'} flex items-center justify-center rounded`}
               style={{
                 width: '5%',
                 height: '8%',
@@ -385,7 +406,7 @@ export function LeaderboardPodium({ topPlayers }: LeaderboardPodiumProps) {
 
             {/* Name */}
             <div 
-              className="absolute text-white font-medium text-xs sm:text-sm md:text-base text-center truncate"
+              className={`absolute ${first.score === 0 ? 'text-gray-400' : 'text-white'} font-medium text-xs sm:text-sm md:text-base text-center truncate`}
               style={{
                 left: '32%',
                 top: '64%',
@@ -399,14 +420,14 @@ export function LeaderboardPodium({ topPlayers }: LeaderboardPodiumProps) {
 
             {/* Score */}
             <div 
-              className="absolute text-[#A578FD] font-bold text-sm sm:text-lg md:text-xl text-center"
+              className={`absolute ${first.score === 0 ? 'text-gray-500' : 'text-[#A578FD]'} font-bold text-sm sm:text-lg md:text-xl text-center`}
               style={{
                 left: '32%',
                 top: '73%',
                 width: '36%'
               }}
             >
-              {first.score}
+              {first.score === 0 ? '---' : first.score}
             </div>
           </>
         )}
@@ -416,7 +437,7 @@ export function LeaderboardPodium({ topPlayers }: LeaderboardPodiumProps) {
           <>
             {/* Avatar */}
             <div 
-              className="absolute rounded-full overflow-hidden border-2 sm:border-4 border-[#009BD6]"
+              className={`absolute rounded-full overflow-hidden border-2 sm:border-4 ${second.score === 0 ? 'border-gray-400 opacity-50' : 'border-[#009BD6]'}`}
               style={{
                 width: '20%',
                 height: '32%',
@@ -427,13 +448,13 @@ export function LeaderboardPodium({ topPlayers }: LeaderboardPodiumProps) {
               {second.avatar ? (
                 <Image src={second.avatar} alt={second.name} width={100} height={100} className="w-full h-full object-cover" />
               ) : (
-                <div className="w-full h-full bg-gradient-to-b from-blue-400 to-blue-600"></div>
+                <div className={`w-full h-full ${second.score === 0 ? 'bg-gradient-to-b from-gray-400 to-gray-600' : 'bg-gradient-to-b from-blue-400 to-blue-600'}`}></div>
               )}
             </div>
 
             {/* Rank badge */}
             <div 
-              className="absolute bg-[#009BD6] flex items-center justify-center rounded"
+              className={`absolute ${second.score === 0 ? 'bg-gray-500' : 'bg-[#009BD6]'} flex items-center justify-center rounded`}
               style={{
                 width: '5%',
                 height: '8%',
@@ -456,7 +477,7 @@ export function LeaderboardPodium({ topPlayers }: LeaderboardPodiumProps) {
 
             {/* Name */}
             <div 
-              className="absolute text-white font-medium text-xs sm:text-sm text-center truncate"
+              className={`absolute ${second.score === 0 ? 'text-gray-400' : 'text-white'} font-medium text-xs sm:text-sm text-center truncate`}
               style={{
                 left: '1%',
                 top: '76%',
@@ -470,14 +491,14 @@ export function LeaderboardPodium({ topPlayers }: LeaderboardPodiumProps) {
 
             {/* Score */}
             <div 
-              className="absolute text-[#009BD6] font-bold text-sm sm:text-base text-center"
+              className={`absolute ${second.score === 0 ? 'text-gray-500' : 'text-[#009BD6]'} font-bold text-sm sm:text-base text-center`}
               style={{
                 left: '1%',
                 top: '85%',
                 width: '30%'
               }}
             >
-              {second.score}
+              {second.score === 0 ? '---' : second.score}
             </div>
           </>
         )}
@@ -487,7 +508,7 @@ export function LeaderboardPodium({ topPlayers }: LeaderboardPodiumProps) {
           <>
             {/* Avatar */}
             <div 
-              className="absolute rounded-full overflow-hidden border-2 sm:border-4 border-[#00D95F]"
+              className={`absolute rounded-full overflow-hidden border-2 sm:border-4 ${third.score === 0 ? 'border-gray-400 opacity-50' : 'border-[#00D95F]'}`}
               style={{
                 width: '20%',
                 height: '32%',
@@ -498,13 +519,13 @@ export function LeaderboardPodium({ topPlayers }: LeaderboardPodiumProps) {
               {third.avatar ? (
                 <Image src={third.avatar} alt={third.name} width={100} height={100} className="w-full h-full object-cover" />
               ) : (
-                <div className="w-full h-full bg-gradient-to-b from-green-400 to-green-600"></div>
+                <div className={`w-full h-full ${third.score === 0 ? 'bg-gradient-to-b from-gray-400 to-gray-600' : 'bg-gradient-to-b from-green-400 to-green-600'}`}></div>
               )}
             </div>
 
             {/* Rank badge */}
             <div 
-              className="absolute bg-[#00D95F] flex items-center justify-center rounded"
+              className={`absolute ${third.score === 0 ? 'bg-gray-500' : 'bg-[#00D95F]'} flex items-center justify-center rounded`}
               style={{
                 width: '5%',
                 height: '8%',
@@ -527,7 +548,7 @@ export function LeaderboardPodium({ topPlayers }: LeaderboardPodiumProps) {
 
             {/* Name */}
             <div 
-              className="absolute text-white font-medium text-xs sm:text-sm text-center truncate"
+              className={`absolute ${third.score === 0 ? 'text-gray-400' : 'text-white'} font-medium text-xs sm:text-sm text-center truncate`}
               style={{
                 left: '69%',
                 top: '75%',
@@ -541,14 +562,14 @@ export function LeaderboardPodium({ topPlayers }: LeaderboardPodiumProps) {
 
             {/* Score */}
             <div 
-              className="absolute text-[#00D95F] font-bold text-sm sm:text-base text-center"
+              className={`absolute ${third.score === 0 ? 'text-gray-500' : 'text-[#00D95F]'} font-bold text-sm sm:text-base text-center`}
               style={{
                 left: '69%',
                 top: '84%',
                 width: '30%'
               }}
             >
-              {third.score}
+              {third.score === 0 ? '---' : third.score}
             </div>
           </>
         )}

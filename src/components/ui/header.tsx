@@ -57,7 +57,7 @@ export function Header({ currentPage, isPageLoaded = true, className = "" }: Hea
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center gap-4 sm:gap-8 lg:gap-12">
           <button 
-            onClick={() => router.push('/contest')}
+            onClick={() => router.push('/homepage')}
             className={getButtonClass('home')}
           >
             Home
@@ -69,7 +69,7 @@ export function Header({ currentPage, isPageLoaded = true, className = "" }: Hea
             Leaderboard
           </button>
           <button 
-            onClick={() => router.push('/giveaway')}
+            onClick={() => router.push('/score')}
             className={getButtonClass('giveaway')}
           >
             Giveaway
@@ -102,7 +102,7 @@ export function Header({ currentPage, isPageLoaded = true, className = "" }: Hea
           <div className="flex flex-col py-4">
             <button 
               onClick={() => {
-                router.push('/contest')
+                router.push('/homepage')
                 setIsMobileMenuOpen(false)
               }}
               className={getMobileButtonClass('home')}
@@ -117,15 +117,6 @@ export function Header({ currentPage, isPageLoaded = true, className = "" }: Hea
               className={getMobileButtonClass('leaderboard')}
             >
               Leaderboard
-            </button>
-            <button 
-              onClick={() => {
-                router.push('/giveaway')
-                setIsMobileMenuOpen(false)
-              }}
-              className={getMobileButtonClass('giveaway')}
-            >
-              Giveaway
             </button>
             <button 
               onClick={() => {

@@ -132,6 +132,7 @@ export function AdminSettings() {
               type="date"
               value={settings.startDate}
               onChange={(e) => setSettings(prev => ({ ...prev, startDate: e.target.value }))}
+              title="Select contest start date"
               className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white focus:ring-2 focus:ring-[#A578FD] focus:border-transparent"
             />
           </div>
@@ -145,6 +146,7 @@ export function AdminSettings() {
               type="time"
               value={settings.startTime}
               onChange={(e) => setSettings(prev => ({ ...prev, startTime: e.target.value }))}
+              title="Select contest start time"
               className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white focus:ring-2 focus:ring-[#A578FD] focus:border-transparent"
             />
           </div>
@@ -161,6 +163,7 @@ export function AdminSettings() {
             max="168" // 1 week max
             value={settings.duration}
             onChange={(e) => setSettings(prev => ({ ...prev, duration: parseInt(e.target.value) || 24 }))}
+            title="Enter contest duration in hours (1-168)"
             className="w-full md:w-1/3 bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white focus:ring-2 focus:ring-[#A578FD] focus:border-transparent"
           />
           <p className="text-gray-400 text-sm mt-1">

@@ -33,9 +33,20 @@ export default function ScorePage() {
   // Initialize animation observer
   useAnimationObserver();
 
-  // Check if device is mobile
+  // Check if device is mobile and listen for resize events
   useEffect(() => {
-    setIsMobile(isMobileDevice());
+    const checkMobile = () => {
+      setIsMobile(isMobileDevice());
+    };
+
+    // Check on mount
+    checkMobile();
+
+    window.addEventListener('resize', checkMobile);
+
+    return () => {
+      window.removeEventListener('resize', checkMobile);
+    };
   }, []);
 
   // Redirect to home if not authenticated
@@ -139,19 +150,19 @@ export default function ScorePage() {
       {/* Main Content */}
       <div className="flex-1 flex flex-col lg:flex-row items-start justify-between px-4 lg:px-16 py-12 gap-8 lg:gap-16 relative overflow-visible">
         {/* Left Side - Score Details */}
-        <div className={`flex-1 max-w-xs sm:max-w-sm lg:max-w-xl transition-all duration-1000 transform flex flex-col mt-5 ${isPageLoaded ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-8'}`} style={{ transitionDelay: '200ms' }}>
+        <div className={`flex-1 max-w-xs sm:max-w-sm lg:max-w-xl transition-all duration-1000 transform flex flex-col mt-35 ${isPageLoaded ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-8'}`} style={{ transitionDelay: '200ms' }}>
           {/* Stats */}
-          <div className="mb-6 sm:mb-8 lg:mb-12">
+          <div className="mb-3 sm:mb-4 lg:mb-6">
             <p className="text-white font-jost text-lg sm:text-2xl lg:text-3xl mb-3 sm:mb-4 lg:mb-6">
               {userScore?.wpm || 0} WPM | {userScore?.accuracy || 0}% Accuracy
             </p>
-            <h1 className="text-[#A578FD] font-jost font-bold text-[68px] mb-6 sm:mb-8 lg:mb-12 leading-tight">
+            <h1 className="text-[#A578FD] font-jost font-bold text-[68px] mb-4 sm:mb-6 lg:mb-8 leading-tight">
               Your Score: {userScore?.score || 0}
             </h1>
           </div>
 
           {/* Giveaway Button */}
-          <button className="bg-[#A578FD] text-white px-4 sm:px-6 lg:px-8 py-2 sm:py-3 lg:py-4 rounded-xl font-jost font-bold text-xs sm:text-sm lg:text-base uppercase hover:bg-[#A578FD]/90 hover:shadow-lg hover:shadow-[#A578FD]/50 transition-all duration-300 transform hover:scale-105 hover-pop">
+          <button className="bg-[#A578FD] text-white px-4 sm:px-6 lg:px-8 py-2 sm:py-3 lg:py-4 rounded-xl font-jost font-bold text-xs sm:text-sm lg:text-base uppercase hover:bg-[#A578FD]/90 hover:shadow-lg hover:shadow-[#A578FD]/50 transition-all duration-300 transform hover:scale-105 hover-pop w-fit">
             Participate in the Giveaway
           </button>
         </div>
