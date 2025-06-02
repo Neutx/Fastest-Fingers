@@ -142,38 +142,41 @@ export default function ScorePage() {
     <main className="h-screen w-screen bg-black relative flex flex-col overflow-hidden">
       {/* Header */}
       <Header 
-        currentPage="home" 
+        currentPage="giveaway" 
         isPageLoaded={isPageLoaded}
         className="relative z-30"
       />
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col lg:flex-row items-start justify-between px-4 lg:px-16 py-12 gap-8 lg:gap-16 relative overflow-visible">
-        {/* Left Side - Score Details */}
-        <div className={`flex-1 max-w-xs sm:max-w-sm lg:max-w-xl transition-all duration-1000 transform flex flex-col mt-35 ${isPageLoaded ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-8'}`} style={{ transitionDelay: '200ms' }}>
-          {/* Stats */}
-          <div className="mb-3 sm:mb-4 lg:mb-6">
-            <p className="text-white font-jost text-lg sm:text-2xl lg:text-3xl mb-3 sm:mb-4 lg:mb-6">
-              {userScore?.wpm || 0} WPM | {userScore?.accuracy || 0}% Accuracy
-            </p>
-            <h1 className="text-[#A578FD] font-jost font-bold text-[68px] mb-4 sm:mb-6 lg:mb-8 leading-tight">
-              Your Score: {userScore?.score || 0}
-            </h1>
+      <div className="flex-1 flex flex-col lg:flex-row items-start justify-between px-3 lg:px-12 py-6 lg:py-8 gap-6 lg:gap-12 relative overflow-visible">
+        {/* Left Side - Score Details and Prize Pool */}
+        <div className="flex-1 max-w-xs sm:max-w-sm lg:max-w-lg flex flex-col gap-6">
+          {/* Score Details */}
+          <div className={`transition-all duration-1000 transform flex flex-col mt-20 ${isPageLoaded ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-8'}`} style={{ transitionDelay: '200ms' }}>
+            {/* Stats */}
+            <div className="mb-2 sm:mb-3 lg:mb-4">
+              <p className="text-white font-jost text-base sm:text-lg lg:text-xl mb-2 sm:mb-3 lg:mb-4">
+                {userScore?.wpm || 0} WPM | {userScore?.accuracy || 0}% Accuracy
+              </p>
+              <h1 className="text-[#A578FD] font-jost font-bold text-4xl sm:text-5xl lg:text-6xl mb-3 sm:mb-4 lg:mb-6 leading-tight">
+                Your Score: {userScore?.score || 0}
+              </h1>
+            </div>
+
+            {/* Giveaway Button */}
+            <button className="bg-[#A578FD] text-white px-3 sm:px-4 lg:px-6 py-2 sm:py-2.5 lg:py-3 rounded-xl font-jost font-bold text-xs sm:text-sm lg:text-sm uppercase hover:bg-[#A578FD]/90 hover:shadow-lg hover:shadow-[#A578FD]/50 transition-all duration-300 transform hover:scale-105 hover-pop w-fit">
+              Participate in the Giveaway
+            </button>
           </div>
 
-          {/* Giveaway Button */}
-          <button className="bg-[#A578FD] text-white px-4 sm:px-6 lg:px-8 py-2 sm:py-3 lg:py-4 rounded-xl font-jost font-bold text-xs sm:text-sm lg:text-base uppercase hover:bg-[#A578FD]/90 hover:shadow-lg hover:shadow-[#A578FD]/50 transition-all duration-300 transform hover:scale-105 hover-pop w-fit">
-            Participate in the Giveaway
-          </button>
-        </div>
-
-        {/* Prize Pool */}
-        <div className="flex-shrink-0 hidden lg:block">
-          <PrizePool />
+          {/* Prize Pool */}
+          <div className={`transition-all duration-1000 transform ${isPageLoaded ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-8'}`} style={{ transitionDelay: '300ms' }}>
+            <PrizePool />
+          </div>
         </div>
               
-        {/* Right Side - New Leaderboard */}
-        <div className={`flex-1 max-w-sm sm:max-w-lg lg:max-w-2xl transition-all duration-1000 transform flex flex-col min-h-0 ${isPageLoaded ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-8'}`} style={{ transitionDelay: '400ms' }}>
+        {/* Right Side - Leaderboard */}
+        <div className={`flex-1 max-w-sm sm:max-w-md lg:max-w-xl transition-all duration-1000 transform flex flex-col min-h-0 ${isPageLoaded ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-8'}`} style={{ transitionDelay: '400ms' }}>
           <div className="h-full flex flex-col overflow-hidden">
             <LeaderboardSection 
               players={displayAllPlayers}
@@ -184,8 +187,8 @@ export default function ScorePage() {
       </div>
 
       {/* Footer */}
-      <div className={`absolute bottom-4 sm:bottom-6 lg:bottom-8 left-4 sm:left-6 lg:left-8 transition-opacity duration-1000 ${isPageLoaded ? 'opacity-100' : 'opacity-0'}`} style={{ transitionDelay: '600ms' }}>
-        <h2 className="text-[#A578FD] font-faster-one text-2xl sm:text-4xl lg:text-5xl leading-tight tracking-wider">
+      <div className={`absolute bottom-3 sm:bottom-4 lg:bottom-6 left-3 sm:left-4 lg:left-6 transition-opacity duration-1000 ${isPageLoaded ? 'opacity-100' : 'opacity-0'}`} style={{ transitionDelay: '600ms' }}>
+        <h2 className="text-[#A578FD] font-faster-one text-xl sm:text-2xl lg:text-3xl leading-tight tracking-wider">
           FASTEST
           <br />
           FINGERS

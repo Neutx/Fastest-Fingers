@@ -32,17 +32,17 @@ export function LeaderboardPodium({ topPlayers }: LeaderboardPodiumProps) {
 
   return (
     <>
-      {/* Desktop Podium - Original Design */}
-      <div className="hidden lg:block relative" style={{ width: '504.62px', height: '315.96px' }}>
+      {/* Desktop Podium - Smaller Design */}
+      <div className="hidden lg:block relative" style={{ width: '378px', height: '237px' }}>
         {/* Main background rectangle */}
         <div 
           className="absolute bg-[#1E2237]"
           style={{
-            width: '504.62px',
-            height: '146.38px',
-            top: '169.58px',
+            width: '378px',
+            height: '110px',
+            top: '127px',
             left: '0px',
-            borderRadius: '17.706px'
+            borderRadius: '13.3px'
           }}
         ></div>
 
@@ -50,11 +50,11 @@ export function LeaderboardPodium({ topPlayers }: LeaderboardPodiumProps) {
         <div 
           className="absolute bg-[#252A40]"
           style={{
-            width: '180.01px',
-            height: '205.97px',
-            left: '162.31px', // Centered: (504.62 - 180.01) / 2
-            top: '109.99px',
-            borderRadius: '44.2651px 44.2651px 0px 0px'
+            width: '135px',
+            height: '154px',
+            left: '121.5px', // Centered: (378 - 135) / 2
+            top: '82.5px',
+            borderRadius: '33.2px 33.2px 0px 0px'
           }}
         ></div>
 
@@ -62,17 +62,17 @@ export function LeaderboardPodium({ topPlayers }: LeaderboardPodiumProps) {
         <div 
           className="absolute flex items-center justify-center"
           style={{
-            width: '50.17px',
-            height: '39.57px',
-            left: '227.23px', // Centered above 1st place
+            width: '38px',
+            height: '30px',
+            left: '170px', // Centered above 1st place
             top: '0px'
           }}
         >
           <Image 
             src="/crow.png" 
             alt="Winner Crown" 
-            width={50} 
-            height={40}
+            width={38} 
+            height={30}
             className="w-full h-full object-contain drop-shadow-lg"
             priority
           />
@@ -85,15 +85,15 @@ export function LeaderboardPodium({ topPlayers }: LeaderboardPodiumProps) {
             <div 
               className={`absolute rounded-full overflow-hidden ${first.score === 0 ? 'opacity-50' : ''}`}
               style={{
-                width: '120.99px',
-                height: '120.99px',
-                left: '191.82px', // Centered
-                top: '34.74px',
-                border: `4.42651px solid ${first.score === 0 ? '#666' : '#A578FD'}`
+                width: '91px',
+                height: '91px',
+                left: '143.5px', // Centered
+                top: '26px',
+                border: `3.3px solid ${first.score === 0 ? '#666' : '#A578FD'}`
               }}
             >
               {first.avatar ? (
-                <Image src={first.avatar} alt={first.name} width={121} height={121} className="w-full h-full object-cover" />
+                <Image src={first.avatar} alt={first.name} width={91} height={91} className="w-full h-full object-cover" />
               ) : (
                 <div className={`w-full h-full ${first.score === 0 ? 'bg-gradient-to-b from-gray-400 to-gray-600' : 'bg-gradient-to-b from-purple-400 to-purple-600'}`}></div>
               )}
@@ -103,19 +103,19 @@ export function LeaderboardPodium({ topPlayers }: LeaderboardPodiumProps) {
             <div 
               className={`absolute ${first.score === 0 ? 'bg-gray-500' : 'bg-[#A578FD]'} flex items-center justify-center`}
               style={{
-                width: '25.08px',
-                height: '25.08px',
-                left: '239.77px',
-                top: '135.07px',
-                borderRadius: '7.37752px',
+                width: '19px',
+                height: '19px',
+                left: '179.5px',
+                top: '101px',
+                borderRadius: '5.5px',
                 transform: 'rotate(45deg)'
               }}
             >
               <span 
                 className="text-white font-semibold"
                 style={{
-                  fontSize: '11.804px',
-                  lineHeight: '14px',
+                  fontSize: '9px',
+                  lineHeight: '11px',
                   transform: 'rotate(-45deg)'
                 }}
               >
@@ -127,11 +127,11 @@ export function LeaderboardPodium({ topPlayers }: LeaderboardPodiumProps) {
             <div 
               className={`absolute ${first.score === 0 ? 'text-gray-400' : 'text-white'} font-medium truncate`}
               style={{
-                left: '180px',
-                top: '201.03px',
-                width: '144px',
-                fontSize: '17.706px',
-                lineHeight: '21px',
+                left: '135px',
+                top: '151px',
+                width: '108px',
+                fontSize: '13.3px',
+                lineHeight: '16px',
                 fontFamily: 'Inter',
                 textAlign: 'center'
               }}
@@ -143,11 +143,11 @@ export function LeaderboardPodium({ topPlayers }: LeaderboardPodiumProps) {
             <div 
               className={`absolute ${first.score === 0 ? 'text-gray-500' : 'text-[#A578FD]'} font-bold`}
               style={{
-                left: '180px',
-                top: '232.15px',
-                width: '144px',
-                fontSize: '27.4453px',
-                lineHeight: '33px',
+                left: '135px',
+                top: '174px',
+                width: '108px',
+                fontSize: '20.6px',
+                lineHeight: '25px',
                 fontFamily: 'Inter',
                 textAlign: 'center'
               }}
@@ -164,15 +164,15 @@ export function LeaderboardPodium({ topPlayers }: LeaderboardPodiumProps) {
             <div 
               className={`absolute rounded-full overflow-hidden ${second.score === 0 ? 'opacity-50' : ''}`}
               style={{
-                width: '100.33px',
-                height: '100.33px',
-                left: '31.92px',
-                top: '115.89px',
-                border: `4.42651px solid ${second.score === 0 ? '#666' : '#009BD6'}`
+                width: '75px',
+                height: '75px',
+                left: '24px',
+                top: '87px',
+                border: `3.3px solid ${second.score === 0 ? '#666' : '#009BD6'}`
               }}
             >
               {second.avatar ? (
-                <Image src={second.avatar} alt={second.name} width={100} height={100} className="w-full h-full object-cover" />
+                <Image src={second.avatar} alt={second.name} width={75} height={75} className="w-full h-full object-cover" />
               ) : (
                 <div className={`w-full h-full ${second.score === 0 ? 'bg-gradient-to-b from-gray-400 to-gray-600' : 'bg-gradient-to-b from-blue-400 to-blue-600'}`}></div>
               )}
@@ -182,19 +182,19 @@ export function LeaderboardPodium({ topPlayers }: LeaderboardPodiumProps) {
             <div 
               className={`absolute ${second.score === 0 ? 'bg-gray-500' : 'bg-[#009BD6]'} flex items-center justify-center`}
               style={{
-                width: '25.08px',
-                height: '25.08px',
-                left: '81.12px',
-                top: '195.57px',
-                borderRadius: '7.37752px',
+                width: '19px',
+                height: '19px',
+                left: '61px',
+                top: '147px',
+                borderRadius: '5.5px',
                 transform: 'rotate(45deg)'
               }}
             >
               <span 
                 className="text-white font-semibold"
                 style={{
-                  fontSize: '11.804px',
-                  lineHeight: '14px',
+                  fontSize: '9px',
+                  lineHeight: '11px',
                   transform: 'rotate(-45deg)'
                 }}
               >
@@ -206,11 +206,11 @@ export function LeaderboardPodium({ topPlayers }: LeaderboardPodiumProps) {
             <div 
               className={`absolute ${second.score === 0 ? 'text-gray-400' : 'text-white'} font-medium truncate`}
               style={{
-                left: '10px',
-                top: '241.31px',
-                width: '120px',
-                fontSize: '17.706px',
-                lineHeight: '21px',
+                left: '8px',
+                top: '181px',
+                width: '90px',
+                fontSize: '13.3px',
+                lineHeight: '16px',
                 fontFamily: 'Inter',
                 textAlign: 'center'
               }}
@@ -222,11 +222,11 @@ export function LeaderboardPodium({ topPlayers }: LeaderboardPodiumProps) {
             <div 
               className={`absolute ${second.score === 0 ? 'text-gray-500' : 'text-[#009BD6]'} font-bold`}
               style={{
-                left: '10px',
-                top: '267px',
-                width: '120px',
-                fontSize: '22.1326px',
-                lineHeight: '27px',
+                left: '8px',
+                top: '200px',
+                width: '90px',
+                fontSize: '16.6px',
+                lineHeight: '20px',
                 fontFamily: 'Inter',
                 textAlign: 'center'
               }}
@@ -243,15 +243,15 @@ export function LeaderboardPodium({ topPlayers }: LeaderboardPodiumProps) {
             <div 
               className={`absolute rounded-full overflow-hidden ${third.score === 0 ? 'opacity-50' : ''}`}
               style={{
-                width: '100.33px',
-                height: '100.33px',
-                left: '373.24px',
-                top: '112.94px',
-                border: `4.42651px solid ${third.score === 0 ? '#666' : '#00D95F'}`
+                width: '75px',
+                height: '75px',
+                left: '280px',
+                top: '85px',
+                border: `3.3px solid ${third.score === 0 ? '#666' : '#00D95F'}`
               }}
             >
               {third.avatar ? (
-                <Image src={third.avatar} alt={third.name} width={100} height={100} className="w-full h-full object-cover" />
+                <Image src={third.avatar} alt={third.name} width={75} height={75} className="w-full h-full object-cover" />
               ) : (
                 <div className={`w-full h-full ${third.score === 0 ? 'bg-gradient-to-b from-gray-400 to-gray-600' : 'bg-gradient-to-b from-green-400 to-green-600'}`}></div>
               )}
@@ -261,19 +261,19 @@ export function LeaderboardPodium({ topPlayers }: LeaderboardPodiumProps) {
             <div 
               className={`absolute ${third.score === 0 ? 'bg-gray-500' : 'bg-[#00D95F]'} flex items-center justify-center`}
               style={{
-                width: '25.08px',
-                height: '25.08px',
-                left: '424.91px',
-                top: '194.09px',
-                borderRadius: '7.37752px',
+                width: '19px',
+                height: '19px',
+                left: '319px',
+                top: '145px',
+                borderRadius: '5.5px',
                 transform: 'rotate(45deg)'
               }}
             >
               <span 
                 className="text-white font-semibold"
                 style={{
-                  fontSize: '11.804px',
-                  lineHeight: '14px',
+                  fontSize: '9px',
+                  lineHeight: '11px',
                   transform: 'rotate(-45deg)'
                 }}
               >
@@ -285,11 +285,11 @@ export function LeaderboardPodium({ topPlayers }: LeaderboardPodiumProps) {
             <div 
               className={`absolute ${third.score === 0 ? 'text-gray-400' : 'text-white'} font-medium truncate`}
               style={{
-                left: '360px',
-                top: '236.88px',
-                width: '120px',
-                fontSize: '17.706px',
-                lineHeight: '21px',
+                left: '270px',
+                top: '178px',
+                width: '90px',
+                fontSize: '13.3px',
+                lineHeight: '16px',
                 fontFamily: 'Inter',
                 textAlign: 'center'
               }}
@@ -301,11 +301,11 @@ export function LeaderboardPodium({ topPlayers }: LeaderboardPodiumProps) {
             <div 
               className={`absolute ${third.score === 0 ? 'text-gray-500' : 'text-[#00D95F]'} font-bold`}
               style={{
-                left: '360px',
-                top: '272px',
-                width: '120px',
-                fontSize: '22.1326px',
-                lineHeight: '27px',
+                left: '270px',
+                top: '204px',
+                width: '90px',
+                fontSize: '16.6px',
+                lineHeight: '20px',
                 fontFamily: 'Inter',
                 textAlign: 'center'
               }}
@@ -316,8 +316,8 @@ export function LeaderboardPodium({ topPlayers }: LeaderboardPodiumProps) {
         )}
       </div>
 
-      {/* Mobile/Tablet Podium - Responsive Design */}
-      <div className="lg:hidden relative w-full max-w-xs sm:max-w-md md:max-w-lg h-48 sm:h-60 md:h-72 mx-auto">
+      {/* Mobile/Tablet Podium - More Compact Responsive Design */}
+      <div className="lg:hidden relative w-full max-w-xs sm:max-w-sm md:max-w-md h-36 sm:h-44 md:h-52 mx-auto">
         {/* Main background rectangle */}
         <div 
           className="absolute bg-[#1E2237] rounded-lg sm:rounded-xl md:rounded-2xl"

@@ -191,39 +191,39 @@ export default function ContestPage() {
   }
 
   return (
-    <main className="min-h-screen bg-black relative flex flex-col">
+    <main className="h-screen bg-black flex flex-col overflow-hidden">
       {/* Header */}
-      <header className="flex items-center justify-between px-8 py-6 animate-fade-in-up opacity-0 absolute top-0 left-0 right-0 z-10">
-        <div className="flex items-center gap-8">
+      <header className="flex items-center justify-between px-4 sm:px-8 py-3 sm:py-4 animate-fade-in-up opacity-0 flex-shrink-0">
+        <div className="flex items-center gap-4 sm:gap-8">
           <Image
             src="/kreo.png"
             alt="KREO Logo"
-            width={142}
-            height={44}
-            className="hover-pop"
+            width={120}
+            height={37}
+            className="hover-pop sm:w-[142px] sm:h-[44px]"
           />
-          <nav className="flex items-center gap-8">
+          <nav className="flex items-center gap-4 sm:gap-8">
             <button 
               onClick={() => router.push('/homepage')}
-              className="text-[#A578FD] font-jost text-xl"
+              className="text-[#A578FD] font-jost text-sm sm:text-xl"
             >
               Home
             </button>
             <button 
               onClick={() => router.push('/leaderboard')}
-              className="text-white font-jost text-xl hover:text-[#A578FD] transition-colors"
+              className="text-white font-jost text-sm sm:text-xl hover:text-[#A578FD] transition-colors"
             >
               Leaderboard
             </button>
             <button 
-              onClick={() => router.push('/giveaway')}
-              className="text-white font-jost text-xl hover:text-[#A578FD] transition-colors"
+              onClick={() => router.push('/score')}
+              className="text-white font-jost text-sm sm:text-xl hover:text-[#A578FD] transition-colors"
             >
               Giveaway
             </button>
             <button 
               onClick={() => setShowRules(true)}
-              className="text-white font-jost text-xl hover:text-[#A578FD] transition-colors focus:outline-none"
+              className="text-white font-jost text-sm sm:text-xl hover:text-[#A578FD] transition-colors focus:outline-none"
             >
               Rules
             </button>
@@ -238,40 +238,38 @@ export default function ContestPage() {
               console.error('Error logging out:', error);
             }
           }}
-          className="text-white font-jost text-xl hover:text-[#A578FD] transition-colors"
+          className="text-white font-jost text-sm sm:text-xl hover:text-[#A578FD] transition-colors"
         >
           Log Out
         </button>
       </header>
 
       {/* Main Content */}
-      <div className="flex flex-col items-center justify-center px-4 flex-1 min-h-screen">
+      <div className="flex flex-col items-center justify-center px-4 flex-1 min-h-0">
         {/* Title */}
-        <h1 className="text-[#A578FD] font-faster-one text-5xl md:text-6xl text-center mb-8 animate-fade-in-up opacity-0 animate-delay-100">
+        <h1 className="text-[#A578FD] font-faster-one text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-center mb-4 sm:mb-6 lg:mb-8 animate-fade-in-up opacity-0 animate-delay-100">
           FASTEST
           <br />
           FINGERS
         </h1>
 
         {/* Instructions */}
-        <p className="text-white font-jost font-bold text-2xl md:text-4xl text-center mb-16 max-w-4xl animate-fade-in-up opacity-0 animate-delay-200">
+        <p className="text-white font-jost font-bold text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl text-center mb-8 sm:mb-12 lg:mb-16 max-w-4xl animate-fade-in-up opacity-0 animate-delay-200">
           Start typing to begin. 30 seconds. Go!
         </p>
 
         {/* Timer Circle */}
-        <div className="relative mb-16 animate-fade-in-up opacity-0 animate-delay-300">
-          <div className="w-[167px] h-[167px] rounded-full border-[19px] border-[#A578FD] flex items-center justify-center hover-pop">
-            <span className="text-white font-jost font-bold text-5xl">
+        <div className="relative mb-8 sm:mb-12 lg:mb-16 animate-fade-in-up opacity-0 animate-delay-300">
+          <div className="w-[120px] h-[120px] sm:w-[140px] sm:h-[140px] lg:w-[167px] lg:h-[167px] rounded-full border-[15px] sm:border-[17px] lg:border-[19px] border-[#A578FD] flex items-center justify-center hover-pop">
+            <span className="text-white font-jost font-bold text-3xl sm:text-4xl lg:text-5xl">
               {timeLeft}
             </span>
           </div>
         </div>
 
-
-
         {/* Typing Area */}
-        <div className="max-w-5xl w-full text-center animate-fade-in-up opacity-0 animate-delay-300">
-          <div className="text-2xl md:text-3xl leading-[60px] mb-8 font-mono h-[180px] flex flex-col justify-center">
+        <div className="max-w-5xl w-full text-center animate-fade-in-up opacity-0 animate-delay-300 flex-1 min-h-0 flex flex-col">
+          <div className="text-lg sm:text-xl md:text-2xl lg:text-3xl leading-8 sm:leading-10 md:leading-12 lg:leading-[60px] mb-4 sm:mb-6 lg:mb-8 font-mono flex-1 flex flex-col justify-center min-h-0">
             {(() => {
               const words = getDisplayText();
               const wordsPerLine = Math.ceil(words.length / 3);
@@ -280,9 +278,9 @@ export default function ContestPage() {
               for (let i = 0; i < 3; i++) {
                 const lineWords = words.slice(i * wordsPerLine, (i + 1) * wordsPerLine);
                 lines.push(
-                  <div key={i} className="mb-2">
+                  <div key={i} className="mb-1 sm:mb-2">
                     {lineWords.map((wordData, index) => (
-                      <span key={i * wordsPerLine + index} className="mr-3">
+                      <span key={i * wordsPerLine + index} className="mr-2 sm:mr-3">
                         {wordData.characters ? (
                           // Render character by character
                           wordData.characters.map((charData, charIndex) => (
@@ -315,8 +313,8 @@ export default function ContestPage() {
 
         {/* Test Completion Message */}
         {isTestCompleted && (
-          <div className="text-center mt-8">
-            <p className="text-white font-jost text-xl">
+          <div className="text-center mt-4">
+            <p className="text-white font-jost text-lg sm:text-xl">
               Redirecting to your score page...
             </p>
           </div>

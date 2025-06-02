@@ -24,7 +24,7 @@ export function DashboardHeroSection() {
 
   return (
     <section 
-      className="relative min-h-screen bg-black flex flex-col text-center px-4"
+      className="relative h-screen bg-black flex flex-col text-center px-4 overflow-hidden"
       data-scroll-section
     >
       {/* Background Image with Parallax */}
@@ -126,10 +126,10 @@ export function DashboardHeroSection() {
       </nav>
       
       {/* Content positioned above keyboard */}
-      <div className="relative z-20 flex flex-col items-center pt-8 pb-8 flex-1 justify-center">
-        {/* Main Title with parallax */}
+      <div className="relative z-20 flex flex-col items-center pt-4 pb-4 flex-1 justify-start">
+        {/* Main Title with parallax - Moved Up */}
         <h1 
-          className="text-[#A578FD] font-faster-one text-6xl md:text-8xl lg:text-[112px] leading-[0.8] mb-8 animate-fade-in-up opacity-0 animate-delay-100"
+          className="text-[#A578FD] font-faster-one text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-[112px] leading-[0.8] mb-6 md:mb-8 lg:mb-10 mt-8 md:mt-12 lg:mt-16 animate-fade-in-up opacity-0 animate-delay-100"
           data-scroll
           data-scroll-speed="0.3"
         >
@@ -138,22 +138,25 @@ export function DashboardHeroSection() {
           FINGERS
         </h1>
 
-        {/* Subtitle with animation */}
+        {/* Subtitle with animation - Moved Up */}
         <p 
-          className="text-white text-lg md:text-2xl lg:text-[34px] font-degular-thin mb-90 max-w-2xl animate-fade-in-up opacity-0 animate-delay-200"
+          className="text-white text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl 2xl:text-[34px] font-degular-thin mb-8 md:mb-12 lg:mb-16 max-w-2xl animate-fade-in-up opacity-0 animate-delay-200"
           data-scroll
           data-scroll-speed="0.1"
         >
           Ready for the ultimate typing challenge?
         </p>
 
-        {/* Two CTA Buttons */}
-        <div className="flex flex-col md:flex-row gap-4 mb-11">
+        {/* Spacer to push buttons down but not too much */}
+        <div className="flex-1 min-h-[40px] md:min-h-[60px] lg:min-h-[60px]"></div>
+
+        {/* Two CTA Buttons - Positioned to avoid overlap */}
+        <div className="flex flex-col sm:flex-row gap-3 md:gap-4 mb-16 md:mb-20 lg:mb-24">
           <Button 
             variant="purple" 
             size="xl"
             onClick={() => router.push('/contest')}
-            className="w-[344px] font-degular-semibold button-hover animate-fade-in-up opacity-0 animate-delay-300"
+            className="w-[280px] sm:w-[300px] md:w-[320px] lg:w-[344px] font-degular-semibold button-hover animate-fade-in-up opacity-0 animate-delay-300"
             data-scroll
             data-scroll-speed="0.2"
           >
@@ -164,7 +167,7 @@ export function DashboardHeroSection() {
             variant="white" 
             size="xl"
             onClick={() => router.push('/leaderboard')}
-            className="w-[344px] font-degular-semibold button-hover animate-fade-in-up opacity-0 animate-delay-400"
+            className="w-[280px] sm:w-[300px] md:w-[320px] lg:w-[344px] font-degular-semibold button-hover animate-fade-in-up opacity-0 animate-delay-400"
             data-scroll
             data-scroll-speed="0.2"
           >
@@ -175,14 +178,14 @@ export function DashboardHeroSection() {
 
       {/* Animated Scroll Arrow with parallax */}
       <div 
-        className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20 animate-scroll-arrow"
+        className="absolute bottom-4 md:bottom-6 lg:bottom-8 left-1/2 transform -translate-x-1/2 z-20 animate-scroll-arrow"
         data-scroll
         data-scroll-speed="0.4"
       >
         <div className="flex flex-col items-center hover-pop cursor-pointer">
-          <div className="text-white/60 text-sm font-jost mb-2">Scroll Down</div>
-          <ChevronDown className="w-6 h-6 text-white/70" />
-          <ChevronDown className="w-4 h-4 text-white/50 -mt-3" />
+          <div className="text-white/60 text-xs sm:text-sm font-jost mb-1 md:mb-2">Scroll Down</div>
+          <ChevronDown className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-white/70" />
+          <ChevronDown className="w-3 h-3 sm:w-3 sm:h-3 md:w-4 md:h-4 text-white/50 -mt-2 md:-mt-3" />
         </div>
       </div>
     </section>
