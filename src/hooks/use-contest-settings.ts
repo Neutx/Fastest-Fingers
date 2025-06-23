@@ -20,8 +20,8 @@ export function useContestSettings() {
         setSettings(null);
       }
       setIsLoading(false);
-    }, (error) => {
-      console.error('Error fetching contest settings:', error);
+    }, () => {
+      // Error fetching contest settings
       setIsLoading(false);
     });
 

@@ -105,8 +105,8 @@ export function GiveawayModal({ isOpen, onClose, userScore, userName }: Giveaway
       link.download = `${userName}-${cardTier.name}-card.png`;
       link.href = dataUrl;
       link.click();
-    } catch (error) {
-      console.error('Error downloading card:', error);
+    } catch {
+      // Error downloading card
       alert('Unable to download card. Please try again.');
     }
   };

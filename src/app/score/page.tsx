@@ -73,8 +73,8 @@ export default function ScorePage() {
               });
             }
           }
-        } catch (error) {
-          console.error('Error fetching user score:', error);
+        } catch {
+          // Error fetching user score
         }
       }
     };

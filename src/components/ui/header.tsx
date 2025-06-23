@@ -21,9 +21,9 @@ function HeaderComponent({ currentPage, isPageLoaded = true, className = "" }: H
     try {
       await signOut();
       router.push('/');
-    } catch (error) {
-      console.error('Error logging out:', error);
-    }
+                } catch {
+              // Error logging out
+            }
   }, [signOut, router]);
 
   const handleNavigation = useCallback((path: string) => {

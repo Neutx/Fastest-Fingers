@@ -86,8 +86,8 @@ export async function getExploreHive65Analytics(): Promise<ButtonClickAnalytics>
       clicksByDate,
       recentClicks
     };
-  } catch (error) {
-    console.error('Error fetching button analytics:', error);
+  } catch {
+    // Error fetching button analytics
     return {
       totalClicks: 0,
       uniqueUsers: 0,
@@ -109,8 +109,8 @@ export async function getAllButtonClicks() {
       id: doc.id,
       ...doc.data()
     }));
-  } catch (error) {
-    console.error('Error fetching all button clicks:', error);
-    return [];
-  }
+      } catch {
+      // Error fetching all button clicks
+      return [];
+    }
 } 

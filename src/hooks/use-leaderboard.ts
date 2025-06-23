@@ -63,8 +63,8 @@ export function useLeaderboard(currentUserUid?: string) {
         setTopPlayers(players.slice(0, 3)) // Top 3 for podium
         setUserRank(currentUserRank)
         
-      } catch (error) {
-        console.error('Error fetching leaderboard:', error)
+      } catch {
+        // Error fetching leaderboard
         setAllPlayers([])
         setTopPlayers([])
         setUserRank(null)

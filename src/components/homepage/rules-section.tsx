@@ -32,9 +32,9 @@ export function RulesSection() {
   const handleGetStarted = async () => {
     try {
       await signInWithGoogle();
-    } catch (error) {
-      console.error("Error signing in:", error);
-    }
+          } catch {
+        // Error signing in
+      }
   }
 
   const handleExploreHive = async () => {

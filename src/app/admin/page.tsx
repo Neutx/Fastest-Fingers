@@ -48,8 +48,8 @@ export default function AdminPage() {
         });
         
         setUsers(usersData);
-      } catch (error) {
-        console.error('Error fetching users:', error);
+      } catch {
+        // Error fetching users
       } finally {
         setIsLoadingData(false);
       }
