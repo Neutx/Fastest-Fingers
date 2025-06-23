@@ -2,17 +2,17 @@
 
 import { useAuth } from "@/components/auth-provider";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { LoadingAnimation } from "@/components/ui/loading";
 import { Header } from "@/components/ui/header";
 import { PrizePool } from "@/components/ui/prize-pool";
 import { LeaderboardSection } from "@/components/ui/leaderboard-section";
 import { DesktopOnly } from "@/components/ui/desktop-only";
-import { useAnimationObserver } from "@/hooks/use-animation-observer";
 import { useLeaderboard } from "@/hooks/use-leaderboard";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { isMobileDevice } from "@/utils/device-detection";
+import { GiveawayModal } from "@/components/ui/giveaway-modal";
 
 interface UserScore {
   wpm: number;
@@ -26,12 +26,10 @@ export default function ScorePage() {
   const [userScore, setUserScore] = useState<UserScore | null>(null);
   const [isPageLoaded, setIsPageLoaded] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [showGiveawayModal, setShowGiveawayModal] = useState(false);
 
   // Fetch real leaderboard data
   const { allPlayers, isLoading: leaderboardLoading } = useLeaderboard(user?.uid);
-
-  // Initialize animation observer
-  useAnimationObserver();
 
   // Check if device is mobile and listen for resize events
   useEffect(() => {
@@ -42,10 +40,11 @@ export default function ScorePage() {
     // Check on mount
     checkMobile();
 
-    window.addEventListener('resize', checkMobile);
+    const resizeHandler = () => checkMobile();
+    window.addEventListener('resize', resizeHandler);
 
     return () => {
-      window.removeEventListener('resize', checkMobile);
+      window.removeEventListener('resize', resizeHandler);
     };
   }, []);
 
@@ -83,7 +82,7 @@ export default function ScorePage() {
     fetchUserScore();
   }, [user]);
 
-  // Trigger animations after page loads
+  // Trigger page loaded state
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsPageLoaded(true);
@@ -91,37 +90,26 @@ export default function ScorePage() {
     return () => clearTimeout(timer);
   }, []);
 
-  // Get display data for leaderboard
-  const getDisplayData = () => {
+  // Memoize display data to prevent unnecessary recalculations
+  const displayData = useMemo(() => {
     if (leaderboardLoading) {
-      // Return loading data while fetching
-      return {
-        allPlayers: [
+      return [
           { rank: 1, name: "Loading...", score: 0 },
           { rank: 2, name: "Loading...", score: 0 },
           { rank: 3, name: "Loading...", score: 0 },
-        ]
-      };
+      ];
     }
 
     if (allPlayers.length === 0) {
-      // Return placeholder data if no one has completed tests yet
-      return {
-        allPlayers: [
+      return [
           { rank: 1, name: "Be the first!", score: 0 },
           { rank: 2, name: "Complete the test", score: 0 },
           { rank: 3, name: "Join the leaderboard", score: 0 },
-        ]
-      };
+      ];
     }
 
-    // Return real data - all players for the full leaderboard
-    return {
-      allPlayers: allPlayers
-    };
-  };
-
-  const { allPlayers: displayAllPlayers } = getDisplayData();
+    return allPlayers;
+  }, [allPlayers, leaderboardLoading]);
 
   // Show loading while checking auth or loading leaderboard
   if (loading) {
@@ -164,7 +152,10 @@ export default function ScorePage() {
             </div>
 
             {/* Giveaway Button */}
-            <button className="bg-[#A578FD] text-white px-3 sm:px-4 lg:px-6 py-2 sm:py-2.5 lg:py-3 rounded-xl font-jost font-bold text-xs sm:text-sm lg:text-sm uppercase hover:bg-[#A578FD]/90 hover:shadow-lg hover:shadow-[#A578FD]/50 transition-all duration-300 transform hover:scale-105 hover-pop w-fit">
+            <button 
+              onClick={() => setShowGiveawayModal(true)}
+              className="bg-[#A578FD] text-white px-3 sm:px-4 lg:px-6 py-2 sm:py-2.5 lg:py-3 rounded-xl font-jost font-bold text-xs sm:text-sm lg:text-sm uppercase hover:bg-[#A578FD]/90 transition-colors duration-200 cursor-pointer w-fit"
+            >
               Participate in the Giveaway
             </button>
           </div>
@@ -179,7 +170,7 @@ export default function ScorePage() {
         <div className={`flex-1 max-w-sm sm:max-w-md lg:max-w-xl transition-all duration-1000 transform flex flex-col min-h-0 ${isPageLoaded ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-8'}`} style={{ transitionDelay: '400ms' }}>
           <div className="h-full flex flex-col overflow-hidden">
             <LeaderboardSection 
-              players={displayAllPlayers}
+              players={displayData}
               userScore={userScore?.score}
             />
           </div>
@@ -187,13 +178,27 @@ export default function ScorePage() {
       </div>
 
       {/* Footer */}
-      <div className={`absolute bottom-3 sm:bottom-4 lg:bottom-6 left-3 sm:left-4 lg:left-6 transition-opacity duration-1000 ${isPageLoaded ? 'opacity-100' : 'opacity-0'}`} style={{ transitionDelay: '600ms' }}>
+      <div 
+        className="absolute bottom-3 sm:bottom-4 lg:bottom-6 left-3 sm:left-4 lg:left-6"
+        style={{
+          opacity: isPageLoaded ? 1 : 0,
+          transition: 'opacity 0.4s ease-out 0.6s'
+        }}
+      >
         <h2 className="text-[#A578FD] font-faster-one text-xl sm:text-2xl lg:text-3xl leading-tight tracking-wider">
           FASTEST
           <br />
           FINGERS
         </h2>
       </div>
+
+      {/* Giveaway Modal */}
+      <GiveawayModal
+        isOpen={showGiveawayModal}
+        onClose={() => setShowGiveawayModal(false)}
+        userScore={userScore}
+        userName={user?.displayName || "User"}
+      />
     </main>
   );
 }

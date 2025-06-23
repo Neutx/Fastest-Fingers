@@ -28,7 +28,7 @@ export default function NotFound() {
             alt="KREO Logo"
             width={200}
             height={62}
-            className="mx-auto hover-pop"
+            className="mx-auto"
             priority
           />
         </div>
@@ -50,7 +50,7 @@ export default function NotFound() {
         <div className="animate-fade-in-up opacity-0" style={{ animationDelay: '0.3s', animationFillMode: 'forwards' }}>
           <button
             onClick={handleGoHome}
-            className="bg-[#A578FD] text-white px-8 py-4 rounded-xl font-jost font-bold text-lg uppercase hover:bg-[#A578FD]/90 hover:shadow-lg hover:shadow-[#A578FD]/50 transition-all duration-300 transform hover:scale-105 hover-pop focus:outline-none focus:ring-2 focus:ring-[#A578FD]/50"
+            className="bg-[#A578FD] text-white px-8 py-4 rounded-xl font-jost font-bold text-lg uppercase hover:bg-[#A578FD]/90 transition-colors duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#A578FD]/50"
           >
             Back to Home
           </button>

@@ -2,8 +2,11 @@
 
 import { useState, useMemo } from "react";
 import { format } from "date-fns";
-import { Trophy, Medal, Award, Crown } from "lucide-react";
+import { Trophy, Medal, Award, Crown, RotateCcw } from "lucide-react";
 import { UserData } from "@/types/admin";
+import { ConfirmModal } from "@/components/ui/confirm-modal";
+import { doc, setDoc, serverTimestamp } from "firebase/firestore";
+import { db } from "@/lib/firebase";
 
 interface AdminLeaderboardProps {
   users: UserData[];
@@ -11,12 +14,15 @@ interface AdminLeaderboardProps {
 
 export function AdminLeaderboard({ users }: AdminLeaderboardProps) {
   const [currentPage, setCurrentPage] = useState(1);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [selectedUser, setSelectedUser] = useState<UserData | null>(null);
+  const [isResetting, setIsResetting] = useState(false);
   const itemsPerPage = 20;
 
   // Filter and sort users by score (only those who completed the test)
   const leaderboardUsers = useMemo(() => {
     return users
-      .filter(user => user.hasCompletedTest && user.bestScore > 0)
+      .filter(user => user.hasCompletedTest)
       .sort((a, b) => (b.bestScore || 0) - (a.bestScore || 0))
       .map((user, index) => ({
         ...user,
@@ -28,6 +34,46 @@ export function AdminLeaderboard({ users }: AdminLeaderboardProps) {
   const totalPages = Math.ceil(leaderboardUsers.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const paginatedUsers = leaderboardUsers.slice(startIndex, startIndex + itemsPerPage);
+
+  const handleResetUser = (user: UserData) => {
+    setSelectedUser(user);
+    setShowConfirmModal(true);
+  };
+
+  const confirmReset = async () => {
+    if (!selectedUser) return;
+
+    setIsResetting(true);
+    try {
+      const userRef = doc(db, 'users', selectedUser.uid);
+      
+      await setDoc(userRef, {
+        hasCompletedTest: false,
+        testResult: null,
+        bestScore: 0,
+        completedAt: null,
+        lastTestAt: serverTimestamp()
+      }, { merge: true });
+
+      // Close modal and reset state
+      setShowConfirmModal(false);
+      setSelectedUser(null);
+      
+      // Refresh the users data
+      window.location.reload();
+      
+    } catch (error) {
+      console.error('Error resetting user score:', error);
+      alert('Failed to reset user score. Please try again.');
+    } finally {
+      setIsResetting(false);
+    }
+  };
+
+  const cancelReset = () => {
+    setShowConfirmModal(false);
+    setSelectedUser(null);
+  };
 
   const getRankIcon = (rank: number) => {
     switch (rank) {
@@ -146,6 +192,9 @@ export function AdminLeaderboard({ users }: AdminLeaderboardProps) {
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                   Completed
                 </th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                  Actions
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -195,6 +244,18 @@ export function AdminLeaderboard({ users }: AdminLeaderboardProps) {
                       {user.completedAt ? format(user.completedAt.toDate(), "MMM dd, yyyy") : "-"}
                     </span>
                   </td>
+                                     <td className="px-4 py-3">
+                     <div className="flex items-center gap-2">
+                       <button
+                         onClick={() => handleResetUser(user)}
+                         className="text-sm text-gray-400 hover:text-white transition-colors duration-200 p-1 rounded"
+                         title={`Reset ${user.displayName}'s score`}
+                         aria-label={`Reset ${user.displayName}'s score`}
+                       >
+                         <RotateCcw className="w-4 h-4" />
+                       </button>
+                     </div>
+                   </td>
                 </tr>
               ))}
             </tbody>
@@ -238,6 +299,19 @@ export function AdminLeaderboard({ users }: AdminLeaderboardProps) {
           </div>
         </div>
       </div>
+
+             {showConfirmModal && selectedUser && (
+         <ConfirmModal
+           isOpen={showConfirmModal}
+           title="Reset User Score"
+           message={`Are you sure you want to reset ${selectedUser.displayName}'s score? This will allow them to participate again.`}
+           onConfirm={confirmReset}
+           onClose={cancelReset}
+           confirmText="Reset Score"
+           cancelText="Cancel"
+           isLoading={isResetting}
+         />
+       )}
     </div>
   );
 } 

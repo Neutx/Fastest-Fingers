@@ -1,13 +1,42 @@
 "use client"
 
+import { useContestSettings } from "@/hooks/use-contest-settings"
+
 interface PrizeCardProps {
   title: string
   description: string
 }
 
 function PrizeCard({ title, description }: PrizeCardProps) {
+  const { hive65Link } = useContestSettings();
+  
   // Split title to handle "aka" parts with different fonts
   const titleParts = title.split(/(aka [^"]*)/);
+  
+  // Function to make Hive 65 clickable in description
+  const renderDescription = (text: string) => {
+    if (!text.includes('Hive 65')) {
+      return text;
+    }
+    
+    const parts = text.split(/(Hive 65)/);
+    return parts.map((part, index) => {
+      if (part === 'Hive 65' && hive65Link) {
+        return (
+          <a 
+            key={index}
+            href={hive65Link}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-[#A578FD] hover:text-[#A578FD]/80 underline transition-colors cursor-pointer"
+          >
+            {part}
+          </a>
+        );
+      }
+      return part;
+    });
+  };
   
   return (
     <div className="bg-white/40 backdrop-blur-sm border border-gray-400 rounded-xl p-8 shadow-lg card-hover">
@@ -22,7 +51,7 @@ function PrizeCard({ title, description }: PrizeCardProps) {
         ))}
       </h3>
       <p className="text-black text-base leading-relaxed font-jost">
-        {description}
+        {renderDescription(description)}
       </p>
     </div>
   )

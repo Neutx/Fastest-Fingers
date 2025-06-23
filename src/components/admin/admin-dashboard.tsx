@@ -24,12 +24,19 @@ export function AdminDashboard({ users }: AdminDashboardProps) {
       <header className="border-b border-gray-800 px-6 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <Image
-              src="/kreo.png"
-              alt="KREO Logo"
-              width={142}
-              height={44}
-            />
+            <button 
+              onClick={() => window.location.href = '/homepage'} 
+              className="focus:outline-none"
+              aria-label="Go to homepage"
+            >
+              <Image
+                src="/kreo.png"
+                alt="KREO Logo"
+                width={142}
+                height={44}
+                className="cursor-pointer"
+              />
+            </button>
             <h1 className="text-2xl font-faster-one text-[#A578FD]">
               ADMIN DASHBOARD
             </h1>

@@ -107,17 +107,17 @@ export function RulesSection() {
         >
           <Button 
             variant="purple" 
-            size="xl"
+            size="lg-button"
             onClick={handleGetStarted}
-            className="w-[344px] font-degular-semibold button-hover animate-fade-in-up opacity-0 animate-delay-100"
+            className="w-[320px] font-degular-semibold button-hover animate-fade-in-up opacity-0 animate-delay-100"
           >
             Click to get started
           </Button>
           <Button 
             variant="white" 
-            size="xl"
+            size="lg-button"
             onClick={handleExploreHive}
-            className="w-[344px] font-degular-semibold button-hover animate-fade-in-up opacity-0 animate-delay-200"
+            className="w-[320px] font-degular-semibold button-hover animate-fade-in-up opacity-0 animate-delay-200"
           >
             eXPLORE hive 65
           </Button>

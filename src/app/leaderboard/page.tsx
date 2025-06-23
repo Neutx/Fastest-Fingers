@@ -2,11 +2,10 @@
 
 import { useAuth } from "@/components/auth-provider";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { LoadingAnimation } from "@/components/ui/loading";
 import { Header } from "@/components/ui/header";
 import { LeaderboardSection } from "@/components/ui/leaderboard-section";
-import { useAnimationObserver } from "@/hooks/use-animation-observer";
 import { useLeaderboard } from "@/hooks/use-leaderboard";
 import { usePrizePool } from "@/hooks/use-prize-pool";
 import { doc, getDoc } from "firebase/firestore";
@@ -29,9 +28,6 @@ export default function LeaderboardPage() {
 
   // Fetch dynamic prize pool data
   const { totalPrizePool, formattedBreakdown, isLoading: prizePoolLoading } = usePrizePool(user?.uid);
-
-  // Initialize animation observer
-  useAnimationObserver();
 
   // Redirect to home if not authenticated
   useEffect(() => {
@@ -67,7 +63,7 @@ export default function LeaderboardPage() {
     fetchUserScore();
   }, [user]);
 
-  // Trigger animations after page loads
+  // Trigger page loaded state
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsPageLoaded(true);
@@ -75,10 +71,9 @@ export default function LeaderboardPage() {
     return () => clearTimeout(timer);
   }, []);
 
-  // Get real leaderboard data for display
-  const getDisplayData = () => {
+  // Memoize display data to prevent unnecessary recalculations
+  const displayData = useMemo(() => {
     if (leaderboardLoading) {
-      // Return loading data while fetching
       return [
         { rank: 1, name: "Loading...", score: 0 },
         { rank: 2, name: "Loading...", score: 0 },
@@ -87,7 +82,6 @@ export default function LeaderboardPage() {
     }
 
     if (allPlayers.length === 0) {
-      // Return placeholder data if no one has completed tests yet
       return [
         { rank: 1, name: "Be the first!", score: 0 },
         { rank: 2, name: "Complete the test", score: 0 },
@@ -95,11 +89,8 @@ export default function LeaderboardPage() {
       ];
     }
 
-    // Return real data - all players for the full leaderboard
     return allPlayers;
-  };
-
-  const leaderboardPlayers = getDisplayData();
+  }, [allPlayers, leaderboardLoading]);
 
   // Show loading while checking auth
   if (loading) {
@@ -117,12 +108,13 @@ export default function LeaderboardPage() {
       <Header 
         currentPage="leaderboard" 
         isPageLoaded={isPageLoaded}
+        className="relative z-30"
       />
 
       {/* Prize Pool - Desktop: Absolutely positioned on left, Mobile: Hidden */}
       <div className={`hidden lg:block absolute left-4 sm:left-8 md:left-12 lg:left-24 top-[20%] sm:top-1/4 transform z-10 transition-all duration-1000 ${isPageLoaded ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-8'}`} style={{ transitionDelay: '200ms' }}>
         <div className="relative">
-          <div className="border border-white/30 rounded-lg bg-black/20 backdrop-blur-sm hover-pop">
+                     <div className="border border-white/30 rounded-lg bg-black/20 backdrop-blur-sm">
             {/* Red Label */}
             <div className="absolute -top-3 right-2 sm:right-4">
               <div className="bg-red-600 text-white px-2 sm:px-4 py-1 rounded text-xs font-bold uppercase tracking-wide">
@@ -149,7 +141,7 @@ export default function LeaderboardPage() {
         <div className={`max-w-4xl w-full transition-all duration-1000 transform flex flex-col min-h-0 ${isPageLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`} style={{ transitionDelay: '400ms' }}>
           <div className="h-full flex flex-col overflow-hidden">
             <LeaderboardSection 
-              players={leaderboardPlayers}
+              players={displayData}
               userScore={userScore?.score}
             />
           </div>
@@ -158,7 +150,7 @@ export default function LeaderboardPage() {
         {/* Prize Pool - Mobile/Tablet: Below Leaderboard, Desktop: Hidden */}
         <div className={`lg:hidden mt-8 sm:mt-12 md:mt-16 transition-all duration-1000 ${isPageLoaded ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-8'}`} style={{ transitionDelay: '600ms' }}>
           <div className="relative">
-            <div className="border border-white/30 rounded-xl sm:rounded-2xl bg-black/20 backdrop-blur-sm hover-pop">
+                         <div className="border border-white/30 rounded-xl sm:rounded-2xl bg-black/20 backdrop-blur-sm">
               {/* Red Label */}
               <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
                 <div className="bg-red-600 text-white px-3 sm:px-4 py-1.5 rounded text-xs sm:text-sm font-bold uppercase tracking-wide whitespace-nowrap">

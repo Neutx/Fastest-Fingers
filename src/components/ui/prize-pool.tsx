@@ -7,7 +7,7 @@ export function PrizePool() {
 
   return (
     <div className="relative max-w-52">
-      <div className="relative border border-white/30 rounded-lg bg-black/20 backdrop-blur-sm hover-pop">
+      <div className="relative border border-white/30 rounded-lg bg-black/20 backdrop-blur-sm">
         {/* Red Label */}
         <div className="absolute -top-3 right-3">
           <div className="bg-red-600 text-white px-3 py-1 rounded text-xs font-bold uppercase tracking-wide">

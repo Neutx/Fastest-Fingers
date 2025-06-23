@@ -48,7 +48,7 @@ export function HeroSection() {
             alt="KREO Logo"
             width={200}
             height={62}
-            className="mx-auto hover-pop"
+            className="mx-auto"
           />
         </div>
 
@@ -75,9 +75,9 @@ export function HeroSection() {
         {/* CTA Button with hover animation */}
         <Button 
           variant="purple" 
-          size="xl"
+          size="lg-button"
           onClick={handleGetStarted}
-          className="w-[344px] font-degular-semibold mb-16 button-hover animate-fade-in-up opacity-0 animate-delay-300"
+          className="w-[320px] font-degular-semibold mb-16 button-hover animate-fade-in-up opacity-0 animate-delay-300"
           data-scroll
           data-scroll-speed="0.2"
         >
@@ -91,7 +91,7 @@ export function HeroSection() {
         data-scroll
         data-scroll-speed="0.4"
       >
-        <div className="flex flex-col items-center hover-pop cursor-pointer">
+        <div className="flex flex-col items-center">
           <div className="text-white/60 text-sm font-jost mb-2">Scroll Down</div>
           <ChevronDown className="w-6 h-6 text-white/70" />
           <ChevronDown className="w-4 h-4 text-white/50 -mt-3" />
