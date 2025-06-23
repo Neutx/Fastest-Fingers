@@ -33,6 +33,7 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={`${inter.variable} ${jost.variable} ${courierPrime.variable} antialiased`}
+        suppressHydrationWarning={true}
       >
         <AuthProvider>
         {children}

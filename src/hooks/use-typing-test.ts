@@ -134,7 +134,7 @@ export function useTypingTest(sampleText: string, testDuration: number = 30) {
       // Check if a complete word was just finished (space typed or last char of last word)
       if (key === ' ' && expectedChar === ' ') {
         // A space was correctly typed, check if the previous word was completely correct
-        const typedWords = prev.typedText.split(' ');
+        const typedWords = newState.typedText.split(' ');
         const expectedWords = fullText.split(' ');
         const lastTypedWordIndex = typedWords.length - 1;
         

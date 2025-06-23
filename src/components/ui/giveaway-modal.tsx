@@ -190,7 +190,7 @@ export function GiveawayModal({ isOpen, onClose, userScore, userName }: Giveaway
                              Well Done! You&apos;re ahead than{" "}
                <span className="text-[#A578FD] font-extrabold">x</span>
                <span className="text-[#A578FD] font-bold">{percentile}%</span>{" "}
-               people. Although you couldn&apos;t win, you still have a chance to win the Kreo Ikarus.
+               people. Although you couldn&apos;t win, you still have a chance to win the Kreo Hive 65.
             </p>
 
                          <p>Here&apos;s how you can win:</p>

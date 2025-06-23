@@ -280,20 +280,21 @@ export default function ContestPage() {
             {(() => {
               const allWords = getDisplayText();
               
-              // Paginate words to show only 30 at a time
-              const currentPage = Math.floor(currentWordIndex / 30);
-              const startIndex = currentPage * 30;
-              const wordsToDisplay = allWords.slice(startIndex, startIndex + 30);
-
               const wordsPerLine = 9; // Fixed words per line to prevent text wrapping
-              const lines = [];
+              const currentLineIndex = Math.floor(currentWordIndex / wordsPerLine);
+
+              const linesToShow = 3;
+              const firstLineIndex = Math.max(0, currentLineIndex - 1);
               
-              for (let i = 0; i < 3; i++) {
-                const lineWords = wordsToDisplay.slice(i * wordsPerLine, (i + 1) * wordsPerLine);
+              const lines = [];
+              for (let i = 0; i < linesToShow; i++) {
+                const lineIndex = firstLineIndex + i;
+                const lineWords = allWords.slice(lineIndex * wordsPerLine, (lineIndex + 1) * wordsPerLine);
+                
                 if (lineWords.length === 0) continue;
                 
                 lines.push(
-                  <div key={i} className="mb-1 sm:mb-2 min-h-[1.5em] whitespace-nowrap overflow-hidden">
+                  <div key={lineIndex} className="mb-1 sm:mb-2 min-h-[1.5em] whitespace-nowrap overflow-hidden">
                     {lineWords.map((wordData) => (
                       <span key={wordData.wordIndex} className="mr-2 sm:mr-3 inline-block">
                         {wordData.characters ? (
@@ -308,7 +309,7 @@ export default function ContestPage() {
                               style={{ minWidth: '0.5ch' }}
                             >
                               {charData.status === 'current' && (
-                                <span className="absolute left-0 top-0 bottom-0 w-[2px] bg-[#A578FD] animate-pulse z-10"></span>
+                                <span className="absolute left-0 top-1/2 -translate-y-1/2 h-3/4 w-[2px] bg-[#A578FD] animate-pulse z-10"></span>
                               )}
                               {charData.char}
                             </span>
