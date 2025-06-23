@@ -44,7 +44,7 @@ export default function KreoLoginPage() {
         await auth.signOut();
       }
     } catch (error: unknown) {
-      console.error("Login error:", error);
+      // Login error
       const errorCode = error instanceof Error && 'code' in error ? (error as { code: string }).code : 'unknown';
       setError(getErrorMessage(errorCode));
     } finally {

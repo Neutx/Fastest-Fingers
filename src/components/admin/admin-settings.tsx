@@ -41,9 +41,9 @@ export function AdminSettings() {
             hive65Link: ''
           });
         }
-      } catch (error) {
-        console.error('Error loading settings:', error);
-      } finally {
+          } catch {
+      // Error loading settings
+    } finally {
         setIsLoading(false);
       }
     };
@@ -60,8 +60,8 @@ export function AdminSettings() {
       await setDoc(settingsRef, settings);
       setSaveMessage('Settings saved successfully!');
       setTimeout(() => setSaveMessage(''), 3000);
-    } catch (error) {
-      console.error('Error saving settings:', error);
+    } catch {
+      // Error saving settings
       setSaveMessage('Error saving settings. Please try again.');
       setTimeout(() => setSaveMessage(''), 3000);
     } finally {

@@ -16,9 +16,9 @@ export function DashboardHeroSection() {
     try {
       await signOut()
       router.push('/')
-    } catch (error) {
-      console.error("Error signing out:", error)
-    }
+          } catch {
+        // Error signing out
+      }
   }
 
 

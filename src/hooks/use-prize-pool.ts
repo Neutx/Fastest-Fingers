@@ -50,8 +50,8 @@ export function usePrizePool(currentUserUid?: string) {
           formattedBreakdown
         })
         
-      } catch (error) {
-        console.error('Error fetching user count for prize pool:', error)
+      } catch {
+        // Error fetching user count for prize pool
         // Keep default values on error
       } finally {
         setIsLoading(false)

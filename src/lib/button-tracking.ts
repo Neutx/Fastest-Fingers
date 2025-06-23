@@ -59,8 +59,8 @@ async function getLocationData() {
       country: data.country_name,
       city: data.city
     };
-  } catch (error) {
-    console.log('Location data collection failed:', error);
+  } catch {
+    // Location data collection failed
     return {};
   }
 }
@@ -95,9 +95,9 @@ export async function trackButtonClick(
     // Add to Firebase collection
     await addDoc(collection(db, 'button_clicks'), clickData);
     
-  } catch (error) {
-    console.error('Error tracking button click:', error);
-  }
+      } catch {
+      // Error tracking button click
+    }
 }
 
 // Track specific "EXPLORE hive 65" button clicks

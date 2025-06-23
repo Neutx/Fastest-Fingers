@@ -97,8 +97,8 @@ export default function ContestPage() {
             }
           }
           setIsCheckingTestStatus(false);
-        } catch (error) {
-          console.error('Error checking test status:', error);
+        } catch {
+          // Error checking test status
           setIsCheckingTestStatus(false);
         }
       }
@@ -134,8 +134,8 @@ export default function ContestPage() {
           setTimeout(() => {
             router.push('/score');
           }, 2000);
-        } catch (error) {
-          console.error('Error saving test results:', error);
+        } catch {
+          // Error saving test results
         }
       }
     };
@@ -241,8 +241,8 @@ export default function ContestPage() {
             try {
               await signOut();
               router.push('/');
-            } catch (error) {
-              console.error('Error logging out:', error);
+            } catch {
+              // Error logging out
             }
           }}
           className="text-white font-jost text-sm sm:text-xl hover:text-[#A578FD] transition-colors duration-200 cursor-pointer"

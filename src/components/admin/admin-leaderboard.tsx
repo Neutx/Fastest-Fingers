@@ -62,8 +62,8 @@ export function AdminLeaderboard({ users }: AdminLeaderboardProps) {
       // Refresh the users data
       window.location.reload();
       
-    } catch (error) {
-      console.error('Error resetting user score:', error);
+    } catch {
+      // Error resetting user score
       alert('Failed to reset user score. Please try again.');
     } finally {
       setIsResetting(false);

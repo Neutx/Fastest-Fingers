@@ -47,8 +47,8 @@ async function collectUserData(user: User) {
         timezone: data.timezone,
         isp: data.org
       };
-    } catch (error) {
-      console.error('Error 404aip', error);
+    } catch {
+      // Error fetching IP data
     }
 
     // Get UTM parameters from URL
@@ -89,8 +89,8 @@ async function collectUserData(user: User) {
     };
 
     await setDoc(userRef, userData, { merge: true });
-  } catch (error) {
-    console.error('external script detected', error);
+  } catch {
+    // Error collecting user data
   }
 }
 
@@ -116,9 +116,9 @@ export function useAuthProvider(): AuthContextType {
       const result = await signInWithPopup(auth, googleProvider);
       setLoading(false); // Set loading to false immediately after sign-in
       
-      collectUserData(result.user).catch(console.error);
-    } catch (error) {
-      console.error('Error signing in with Google:', error);
+      collectUserData(result.user).catch(() => {});
+    } catch {
+      // Error signing in with Google
       setLoading(false);
     }
   };
@@ -127,7 +127,7 @@ export function useAuthProvider(): AuthContextType {
     try {
       await firebaseSignOut(auth);
     } catch (error) {
-      console.error('Error signing out:', error);
+      // Error signing out
     }
   };
 
