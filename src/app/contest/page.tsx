@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { LoadingAnimation } from "@/components/ui/loading";
 import { RulesModal } from "@/components/ui/rules-modal";
 import { DesktopOnly } from "@/components/ui/desktop-only";
-import { useAnimationObserver } from "@/hooks/use-animation-observer";
+
 import { useTypingTest } from "@/hooks/use-typing-test";
 import { generateTypingText } from "@/lib/text-generator";
 import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
@@ -23,7 +23,7 @@ export default function ContestPage() {
   const [isCheckingTestStatus, setIsCheckingTestStatus] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
 
-  const [sampleText] = useState(() => generateTypingText(30));
+  const [sampleText, setSampleText] = useState(() => generateTypingText(60));
   
   const {
     timeLeft,
@@ -31,11 +31,17 @@ export default function ContestPage() {
     accuracy,
     isTestCompleted,
     handleKeyPress,
-    getDisplayText
+    getDisplayText,
+    currentWordIndex
   } = useTypingTest(sampleText, 30);
 
-  // Initialize animation observer
-  useAnimationObserver();
+  // Load more words when user gets near the end
+  useEffect(() => {
+    const words = sampleText.split(' ');
+    if (currentWordIndex >= words.length - 15) {
+      setSampleText(prev => prev + ' ' + generateTypingText(30));
+    }
+  }, [currentWordIndex, sampleText]);
 
   // Check if device is mobile
   useEffect(() => {
@@ -192,38 +198,39 @@ export default function ContestPage() {
 
   return (
     <main className="h-screen bg-black flex flex-col overflow-hidden">
-      {/* Header */}
-      <header className="flex items-center justify-between px-4 sm:px-8 py-3 sm:py-4 animate-fade-in-up opacity-0 flex-shrink-0">
+      {/* Custom Header for Contest Page */}
+      <header className="flex items-center justify-between px-4 sm:px-8 py-3 sm:py-4 flex-shrink-0">
         <div className="flex items-center gap-4 sm:gap-8">
+          <button 
+            onClick={() => router.push('/homepage')} 
+            className="focus:outline-none transition-transform duration-200 hover:scale-105"
+            aria-label="Go to homepage"
+          >
           <Image
             src="/kreo.png"
             alt="KREO Logo"
             width={120}
             height={37}
-            className="hover-pop sm:w-[142px] sm:h-[44px]"
+              className="sm:w-[142px] sm:h-[44px] cursor-pointer"
+              priority
           />
+          </button>
           <nav className="flex items-center gap-4 sm:gap-8">
             <button 
-              onClick={() => router.push('/homepage')}
-              className="text-[#A578FD] font-jost text-sm sm:text-xl"
-            >
-              Home
-            </button>
-            <button 
               onClick={() => router.push('/leaderboard')}
-              className="text-white font-jost text-sm sm:text-xl hover:text-[#A578FD] transition-colors"
+              className="text-white font-jost text-sm sm:text-xl hover:text-[#A578FD] transition-colors duration-200 cursor-pointer"
             >
               Leaderboard
             </button>
             <button 
               onClick={() => router.push('/score')}
-              className="text-white font-jost text-sm sm:text-xl hover:text-[#A578FD] transition-colors"
+              className="text-white font-jost text-sm sm:text-xl hover:text-[#A578FD] transition-colors duration-200 cursor-pointer"
             >
               Giveaway
             </button>
             <button 
               onClick={() => setShowRules(true)}
-              className="text-white font-jost text-sm sm:text-xl hover:text-[#A578FD] transition-colors focus:outline-none"
+              className="text-white font-jost text-sm sm:text-xl hover:text-[#A578FD] transition-colors duration-200 focus:outline-none cursor-pointer"
             >
               Rules
             </button>
@@ -238,7 +245,7 @@ export default function ContestPage() {
               console.error('Error logging out:', error);
             }
           }}
-          className="text-white font-jost text-sm sm:text-xl hover:text-[#A578FD] transition-colors"
+          className="text-white font-jost text-sm sm:text-xl hover:text-[#A578FD] transition-colors duration-200 cursor-pointer"
         >
           Log Out
         </button>
@@ -247,20 +254,20 @@ export default function ContestPage() {
       {/* Main Content */}
       <div className="flex flex-col items-center justify-center px-4 flex-1 min-h-0">
         {/* Title */}
-        <h1 className="text-[#A578FD] font-faster-one text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-center mb-4 sm:mb-6 lg:mb-8 animate-fade-in-up opacity-0 animate-delay-100">
+        <h1 className="text-[#A578FD] font-faster-one text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-center mb-3 sm:mb-4 lg:mb-6">
           FASTEST
           <br />
           FINGERS
         </h1>
 
         {/* Instructions */}
-        <p className="text-white font-jost font-bold text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl text-center mb-8 sm:mb-12 lg:mb-16 max-w-4xl animate-fade-in-up opacity-0 animate-delay-200">
+        <p className="text-white font-jost font-bold text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl text-center mb-6 sm:mb-8 lg:mb-12 max-w-4xl">
           Start typing to begin. 30 seconds. Go!
         </p>
 
         {/* Timer Circle */}
-        <div className="relative mb-8 sm:mb-12 lg:mb-16 animate-fade-in-up opacity-0 animate-delay-300">
-          <div className="w-[120px] h-[120px] sm:w-[140px] sm:h-[140px] lg:w-[167px] lg:h-[167px] rounded-full border-[15px] sm:border-[17px] lg:border-[19px] border-[#A578FD] flex items-center justify-center hover-pop">
+        <div className="relative mb-8 sm:mb-12 lg:mb-16">
+          <div className="w-[120px] h-[120px] sm:w-[140px] sm:h-[140px] lg:w-[167px] lg:h-[167px] rounded-full border-[15px] sm:border-[17px] lg:border-[19px] border-[#A578FD] flex items-center justify-center transition-transform duration-200 hover:scale-105">
             <span className="text-white font-jost font-bold text-3xl sm:text-4xl lg:text-5xl">
               {timeLeft}
             </span>
@@ -268,44 +275,61 @@ export default function ContestPage() {
         </div>
 
         {/* Typing Area */}
-        <div className="max-w-5xl w-full text-center animate-fade-in-up opacity-0 animate-delay-300 flex-1 min-h-0 flex flex-col">
+        <div className="max-w-6xl w-full text-center flex-1 min-h-0 flex flex-col">
           <div className="text-lg sm:text-xl md:text-2xl lg:text-3xl leading-8 sm:leading-10 md:leading-12 lg:leading-[60px] mb-4 sm:mb-6 lg:mb-8 font-mono flex-1 flex flex-col justify-center min-h-0">
             {(() => {
-              const words = getDisplayText();
-              const wordsPerLine = Math.ceil(words.length / 3);
-              const lines = [];
+              const allWords = getDisplayText();
               
-              for (let i = 0; i < 3; i++) {
-                const lineWords = words.slice(i * wordsPerLine, (i + 1) * wordsPerLine);
+              const wordsPerLine = 9; // Fixed words per line to prevent text wrapping
+              const currentLineIndex = Math.floor(currentWordIndex / wordsPerLine);
+
+              const linesToShow = 3;
+              const firstLineIndex = Math.max(0, currentLineIndex - 1);
+              
+              const lines = [];
+              for (let i = 0; i < linesToShow; i++) {
+                const lineIndex = firstLineIndex + i;
+                const lineWords = allWords.slice(lineIndex * wordsPerLine, (lineIndex + 1) * wordsPerLine);
+                
+                if (lineWords.length === 0) continue;
+                
                 lines.push(
-                  <div key={i} className="mb-1 sm:mb-2">
-                    {lineWords.map((wordData, index) => (
-                      <span key={i * wordsPerLine + index} className="mr-2 sm:mr-3">
+                  <div key={lineIndex} className="mb-1 sm:mb-2 min-h-[1.5em] whitespace-nowrap overflow-hidden">
+                    {lineWords.map((wordData) => (
+                      <span key={wordData.wordIndex} className="mr-2 sm:mr-3 inline-block">
                         {wordData.characters ? (
-                          // Render character by character
                           wordData.characters.map((charData, charIndex) => (
                             <span
-                              key={charIndex}
-                              className={`${
+                              key={`${wordData.wordIndex}-${charIndex}`}
+                              className={`inline-block relative ${
                                 charData.status === 'correct' ? 'text-white' :
                                 charData.status === 'error' ? 'text-red-400' :
-                                charData.status === 'current' ? 'text-[#A578FD] bg-[#A578FD]/20' :
                                 'text-white/30'
                               }`}
+                              style={{ minWidth: '0.5ch' }}
                             >
+                              {charData.status === 'current' && (
+                                <span className="absolute left-0 top-1/2 -translate-y-1/2 h-3/4 w-[2px] bg-[#A578FD] animate-pulse z-10"></span>
+                              )}
                               {charData.char}
                             </span>
                           ))
                         ) : (
-                          // Fallback for words without character data
-                          <span className="text-white/30">{wordData.word}</span>
+                          // Fallback for word-level status if needed
+                          <span
+                            className={`${
+                              wordData.status === 'completed' ? 'text-white' :
+                              'text-white/30'
+                            }`}
+                          >
+                            {wordData.word}
+                          </span>
                         )}
                       </span>
                     ))}
                   </div>
                 );
               }
-              
               return lines;
             })()}
           </div>

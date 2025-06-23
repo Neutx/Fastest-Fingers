@@ -95,7 +95,6 @@ export async function trackButtonClick(
     // Add to Firebase collection
     await addDoc(collection(db, 'button_clicks'), clickData);
     
-    console.log(`Button click tracked: ${buttonId}`);
   } catch (error) {
     console.error('Error tracking button click:', error);
   }

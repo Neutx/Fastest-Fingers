@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
-import { Calendar, Clock, Save, AlertCircle } from "lucide-react";
+import { Calendar, Clock, Save, AlertCircle, Link } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ContestSettings } from "@/types/contest";
 
@@ -12,7 +12,8 @@ export function AdminSettings() {
     startDate: '',
     startTime: '',
     duration: 24,
-    isActive: false
+    isActive: false,
+    hive65Link: ''
   });
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
@@ -36,7 +37,8 @@ export function AdminSettings() {
             startDate: defaultDate.toISOString().split('T')[0],
             startTime: '10:00',
             duration: 24,
-            isActive: false
+            isActive: false,
+            hive65Link: ''
           });
         }
       } catch (error) {
@@ -171,6 +173,25 @@ export function AdminSettings() {
           </p>
         </div>
 
+        {/* Hive 65 Link */}
+        <div>
+          <label className="block text-sm font-medium text-gray-300 mb-2">
+            <Link className="inline w-4 h-4 mr-2" />
+            Hive 65 Product Link
+          </label>
+          <input
+            type="url"
+            value={settings.hive65Link || ''}
+            onChange={(e) => setSettings(prev => ({ ...prev, hive65Link: e.target.value }))}
+            placeholder="https://example.com/hive-65"
+            title="Enter the product page URL for Hive 65"
+            className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white focus:ring-2 focus:ring-[#A578FD] focus:border-transparent"
+          />
+          <p className="text-gray-400 text-sm mt-1">
+            This link will be used when users click on &quot;Hive 65&quot; text in the prizes section
+          </p>
+        </div>
+
         {/* Contest Status Toggle */}
         <div>
           <label className="flex items-center space-x-3">
@@ -178,7 +199,7 @@ export function AdminSettings() {
               type="checkbox"
               checked={settings.isActive}
               onChange={(e) => setSettings(prev => ({ ...prev, isActive: e.target.checked }))}
-              className="w-4 h-4 text-[#A578FD] bg-gray-800 border-gray-700 rounded focus:ring-[#A578FD] focus:ring-2"
+              className="w-4 h-4 text-[#A578FD] bg-gray-800 border-gray-700 rounded focus:ring-2 focus:ring-[#A578FD] focus:ring-2"
             />
             <span className="text-gray-300">Contest is Active</span>
           </label>

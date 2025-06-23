@@ -13,7 +13,7 @@ export function DashboardPrizePool() {
       data-scroll-section
     >
       <div 
-        className="relative border-2 border-white/50 rounded-2xl bg-black/60 backdrop-blur-sm hover-pop animate-fade-in-up opacity-0"
+        className="relative border-2 border-white/50 rounded-2xl bg-black/60 backdrop-blur-sm animate-fade-in-up opacity-0"
         data-scroll
         data-scroll-speed="0.2"
       >

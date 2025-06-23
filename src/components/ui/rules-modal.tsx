@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect } from "react";
+import { useContestSettings } from "@/hooks/use-contest-settings";
 
 interface RulesModalProps {
   isOpen: boolean;
@@ -9,6 +10,8 @@ interface RulesModalProps {
 }
 
 export function RulesModal({ isOpen, onClose, showAutomatically = false }: RulesModalProps) {
+  const { hive65Link } = useContestSettings();
+  
   // Auto-show modal when component mounts if showAutomatically is true
   useEffect(() => {
     if (showAutomatically) {
@@ -36,7 +39,16 @@ export function RulesModal({ isOpen, onClose, showAutomatically = false }: Rules
             2. The final score is decided as a multiple of speed and accuracy<br/>
             3. You only get one chance<br/>
             4. Top scorer wins the entire prize pool<br/>
-            5. Another lucky winner from giveaway will also win Hive 65<br/>
+            5. Another lucky winner from giveaway will also win {hive65Link ? (
+              <a 
+                href={hive65Link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[#A578FD] hover:text-[#A578FD]/80 underline transition-colors cursor-pointer"
+              >
+                Hive 65
+              </a>
+            ) : 'Hive 65'}<br/>
           </div>
         </div>
 

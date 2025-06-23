@@ -2,7 +2,7 @@
 
 import { useAuth } from "@/components/auth-provider";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { LoadingAnimation } from "@/components/ui/loading";
 import { AdminDashboard } from "@/components/admin/admin-dashboard";
 import { collection, getDocs, query, orderBy } from "firebase/firestore";
@@ -33,31 +33,33 @@ export default function AdminPage() {
     }
   }, [user, loading, router]);
 
-  // Fetch all users data
-  useEffect(() => {
-    const fetchUsers = async () => {
-      if (isAuthorized) {
-        try {
-          const usersRef = collection(db, 'users');
-          const q = query(usersRef, orderBy('createdAt', 'desc'));
-          const querySnapshot = await getDocs(q);
-          
-          const usersData: UserData[] = [];
-          querySnapshot.forEach((doc) => {
-            usersData.push({ ...doc.data() } as UserData);
-          });
-          
-          setUsers(usersData);
-        } catch (error) {
-          console.error('Error fetching users:', error);
-        } finally {
-          setIsLoadingData(false);
-        }
+  // Function to fetch users data
+  const fetchUsers = useCallback(async () => {
+    if (isAuthorized) {
+      try {
+        setIsLoadingData(true);
+        const usersRef = collection(db, 'users');
+        const q = query(usersRef, orderBy('createdAt', 'desc'));
+        const querySnapshot = await getDocs(q);
+        
+        const usersData: UserData[] = [];
+        querySnapshot.forEach((doc) => {
+          usersData.push({ ...doc.data() } as UserData);
+        });
+        
+        setUsers(usersData);
+      } catch (error) {
+        console.error('Error fetching users:', error);
+      } finally {
+        setIsLoadingData(false);
       }
-    };
-
-    fetchUsers();
+    }
   }, [isAuthorized]);
+
+  // Fetch all users data on initial load
+  useEffect(() => {
+    fetchUsers();
+  }, [fetchUsers]);
 
   // Show loading while checking auth or loading data
   if (loading || isLoadingData) {

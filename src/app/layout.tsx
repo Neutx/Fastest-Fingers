@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Jost } from "next/font/google";
+import { Inter, Jost, Courier_Prime } from "next/font/google";
 import { AuthProvider } from "@/components/auth-provider";
 import "./globals.css";
 
@@ -11,6 +11,12 @@ const inter = Inter({
 const jost = Jost({
   variable: "--font-jost",
   subsets: ["latin"],
+});
+
+const courierPrime = Courier_Prime({
+  variable: "--font-courier-prime",
+  subsets: ["latin"],
+  weight: ["400"],
 });
 
 export const metadata: Metadata = {
@@ -26,7 +32,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${inter.variable} ${jost.variable} antialiased`}
+        className={`${inter.variable} ${jost.variable} ${courierPrime.variable} antialiased`}
+        suppressHydrationWarning={true}
       >
         <AuthProvider>
         {children}

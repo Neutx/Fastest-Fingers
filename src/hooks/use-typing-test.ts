@@ -11,6 +11,7 @@ interface TypingTestState {
   isTestCompleted: boolean;
   timeLeft: number;
   correctChars: number;
+  correctWords: number;
   totalChars: number;
   wpm: number;
   accuracy: number;
@@ -19,7 +20,11 @@ interface TypingTestState {
 }
 
 export function useTypingTest(sampleText: string, testDuration: number = 30) {
-  const words = sampleText.split(' ');
+  const [words, setWords] = useState(() => sampleText.split(' '));
+  
+  useEffect(() => {
+    setWords(sampleText.split(' '));
+  }, [sampleText]);
   
   const [state, setState] = useState<TypingTestState>({
     currentWordIndex: 0,
@@ -29,6 +34,7 @@ export function useTypingTest(sampleText: string, testDuration: number = 30) {
     isTestCompleted: false,
     timeLeft: testDuration,
     correctChars: 0,
+    correctWords: 0,
     totalChars: 0,
     wpm: 0,
     accuracy: 0,
@@ -66,11 +72,11 @@ export function useTypingTest(sampleText: string, testDuration: number = 30) {
   const calculateStats = useCallback(() => {
     const timeElapsed = testDuration - state.timeLeft;
     const minutes = timeElapsed / 60;
-    const wpm = minutes > 0 ? Math.round((state.correctChars / 5) / minutes) : 0;
+    const wpm = minutes > 0 ? Math.round(state.correctWords / minutes) : 0;
     const accuracy = state.totalChars > 0 ? Math.round((state.correctChars / state.totalChars) * 100) : 0;
     
     return { wpm, accuracy };
-  }, [state.correctChars, state.totalChars, state.timeLeft, testDuration]);
+  }, [state.correctChars, state.correctWords, state.totalChars, state.timeLeft, testDuration]);
 
   // Handle key press
   const handleKeyPress = useCallback((key: string) => {
@@ -125,6 +131,18 @@ export function useTypingTest(sampleText: string, testDuration: number = 30) {
         newState.errors = prev.errors + 1;
       }
 
+      // Check if a complete word was just finished (space typed or last char of last word)
+      if (key === ' ' && expectedChar === ' ') {
+        // A space was correctly typed, check if the previous word was completely correct
+        const typedWords = newState.typedText.split(' ');
+        const expectedWords = fullText.split(' ');
+        const lastTypedWordIndex = typedWords.length - 1;
+        
+        if (lastTypedWordIndex < expectedWords.length && typedWords[lastTypedWordIndex] === expectedWords[lastTypedWordIndex]) {
+          newState.correctWords = prev.correctWords + 1;
+        }
+      }
+
       // Update position based on typed text length
       let charCount = 0;
       let wordIndex = 0;
@@ -148,7 +166,7 @@ export function useTypingTest(sampleText: string, testDuration: number = 30) {
       newState.accuracy = stats.accuracy;
 
       // Check if test should end
-      if (newState.typedText.length >= fullText.length || newState.timeLeft <= 0) {
+      if (newState.timeLeft <= 0) {
         newState.isTestCompleted = true;
         newState.isTestActive = false;
       }
@@ -167,6 +185,7 @@ export function useTypingTest(sampleText: string, testDuration: number = 30) {
       isTestCompleted: false,
       timeLeft: testDuration,
       correctChars: 0,
+      correctWords: 0,
       totalChars: 0,
       wpm: 0,
       accuracy: 0,
