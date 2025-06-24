@@ -127,7 +127,7 @@ export function useAuthProvider(): AuthContextType {
     try {
       await firebaseSignOut(auth);
     } catch (error) {
-      // Error signing out
+      console.error(error);
     }
   };
 
