@@ -72,11 +72,13 @@ export function useTypingTest(sampleText: string, testDuration: number = 30) {
   const calculateStats = useCallback(() => {
     const timeElapsed = testDuration - state.timeLeft;
     const minutes = timeElapsed / 60;
-    const wpm = minutes > 0 ? Math.round(state.correctWords / minutes) : 0;
+    // Standard WPM formula: (correct characters / 5) per minute
+    const wordsTyped = state.correctChars / 5;
+    const wpm = minutes > 0 ? Math.round(wordsTyped / minutes) : 0;
     const accuracy = state.totalChars > 0 ? Math.round((state.correctChars / state.totalChars) * 100) : 0;
     
     return { wpm, accuracy };
-  }, [state.correctChars, state.correctWords, state.totalChars, state.timeLeft, testDuration]);
+  }, [state.correctChars, state.totalChars, state.timeLeft, testDuration]);
 
   // Handle key press
   const handleKeyPress = useCallback((key: string) => {
