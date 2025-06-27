@@ -60,7 +60,7 @@ export function UsersDataTable({ users, selectedUsers, onSelectionChange }: User
       cell: (info) => (
         <div className="flex items-center gap-3">
           <Image
-            src={info.row.original.photoURL || "/kreo.png"}
+            src={info.row.original.photoURL || "/kreo.svg"}
             alt={info.getValue() || "User"}
             width={32}
             height={32}

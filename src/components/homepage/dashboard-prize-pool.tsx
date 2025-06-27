@@ -9,7 +9,7 @@ export function DashboardPrizePool() {
 
   return (
     <section 
-      className="bg-black py-16 px-4 flex justify-center items-center"
+      className="bg-black py-16 px-4 flex flex-col justify-center items-center"
       data-scroll-section
     >
       <div 
@@ -30,10 +30,15 @@ export function DashboardPrizePool() {
             ₹{isLoading ? "5,000" : totalPrizePool.toLocaleString()}
           </div>
           <div className="text-white/60 text-xl text-center">
-            {isLoading ? "5000 + 20 × 250" : formattedBreakdown}
+            {isLoading ? "5000 + 5 × 250" : formattedBreakdown}
           </div>
         </div>
       </div>
+
+      {/* Footnote */}
+      <p className="text-white/60 text-xs text-center mt-4">
+        * Capped at a maximum pool of ₹11000
+      </p>
     </section>
   )
 } 

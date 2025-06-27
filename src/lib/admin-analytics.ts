@@ -1,4 +1,4 @@
-import { collection, query, where, getDocs, orderBy, Timestamp } from "firebase/firestore";
+import { collection, query, where, getDocs, orderBy, Timestamp, writeBatch } from "firebase/firestore";
 import { db } from "./firebase";
 
 interface ButtonClickData {
@@ -95,6 +95,28 @@ export async function getExploreHive65Analytics(): Promise<ButtonClickAnalytics>
       clicksByPage: {},
       clicksByDate: {},
       recentClicks: []
+    };
+  }
+}
+
+export async function resetExploreHive65Analytics(): Promise<{ success: boolean; error?: string }> {
+  try {
+    const clicksRef = collection(db, 'button_clicks');
+    const q = query(clicksRef, where('buttonId', '==', 'explore_hive_65'));
+    const querySnapshot = await getDocs(q);
+
+    // Use a batched write to delete all documents
+    const batch = writeBatch(db);
+    querySnapshot.forEach(doc => {
+      batch.delete(doc.ref);
+    });
+    await batch.commit();
+
+    return { success: true };
+  } catch (error) {
+    return { 
+      success: false, 
+      error: error instanceof Error ? error.message : "An unknown error occurred"
     };
   }
 }

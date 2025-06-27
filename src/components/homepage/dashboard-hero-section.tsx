@@ -51,7 +51,7 @@ export function DashboardHeroSection() {
           aria-label="Go to homepage"
         >
           <Image
-            src="/kreo.png"
+            src="/kreo.svg"
             alt="KREO Logo"
             width={142}
             height={44}

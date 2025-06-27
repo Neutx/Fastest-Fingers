@@ -24,7 +24,7 @@ export default function NotFound() {
         {/* Logo */}
         <div className="mb-8 animate-fade-in-up opacity-0" style={{ animationDelay: '0.1s', animationFillMode: 'forwards' }}>
           <Image
-            src="/kreo.png"
+            src="/kreo.svg"
             alt="KREO Logo"
             width={200}
             height={62}

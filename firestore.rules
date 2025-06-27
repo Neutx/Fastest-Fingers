@@ -20,7 +20,7 @@ service cloud.firestore {
     // Button clicks collection - allow anyone to write, admin to read
     match /button_clicks/{clickId} {
       allow create: if true; // Allow anonymous button click tracking
-      allow read: if request.auth != null && request.auth.uid == "tDswM9ZXVrdNBok6oZ6fVXkjHyV2";
+      allow read, delete: if request.auth != null && request.auth.uid == "tDswM9ZXVrdNBok6oZ6fVXkjHyV2";
     }
     
     // Admin collection - allow admin to read and write contest settings
@@ -30,6 +30,11 @@ service cloud.firestore {
     
     // Allow everyone to read contest settings for countdown timer (including unauthenticated users)
     match /admin/contestSettings {
+      allow read: if true;
+    }
+    
+    // Allow everyone to read card settings for giveaway modal (including unauthenticated users)
+    match /admin/cardSettings {
       allow read: if true;
     }
   }

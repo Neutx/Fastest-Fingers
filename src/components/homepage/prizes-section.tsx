@@ -5,13 +5,15 @@ import { useContestSettings } from "@/hooks/use-contest-settings"
 interface PrizeCardProps {
   title: string
   description: string
+  note?: string
 }
 
-function PrizeCard({ title, description }: PrizeCardProps) {
+function PrizeCard({ title, description, note }: PrizeCardProps) {
   const { hive65Link } = useContestSettings();
   
   // Split title to handle "aka" parts with different fonts
   const titleParts = title.split(/(aka [^"]*)/);
+
   
   // Function to make Hive 65 clickable in description
   const renderDescription = (text: string) => {
@@ -50,9 +52,16 @@ function PrizeCard({ title, description }: PrizeCardProps) {
           </span>
         ))}
       </h3>
-      <p className="text-black text-base leading-relaxed font-jost">
-        {renderDescription(description)}
-      </p>
+      <div className="inline-block">
+        <p className="text-black text-base leading-relaxed font-jost">
+          {renderDescription(description)}
+        </p>
+        {note && (
+          <p className="text-black text-[7px] text-right mt-0.5 font-jost">
+            {note}
+          </p>
+        )}
+      </div>
     </div>
   )
 }
@@ -83,7 +92,8 @@ export function PrizesSection() {
           <div className="animate-fade-in-up opacity-0 animate-delay-100">
             <PrizeCard
               title="#The Winner aka the fastest typer"
-              description="Wins the entire prize pool amount set at a base of ₹5,000 and increases by ₹20 with every new participation"
+              description="Wins the entire prize pool amount set at a base of ₹5,000 and increases by ₹5 with every new participation*"
+              note="Capped at a maximum pool of ₹11000"
             />
           </div>
           <div className="animate-fade-in-up opacity-0 animate-delay-200">

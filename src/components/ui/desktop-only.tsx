@@ -7,7 +7,7 @@ export function DesktopOnly() {
         {/* Logo */}
         <div className="mb-8">
           <Image
-            src="/kreo.png"
+            src="/kreo.svg"
             alt="KREO Logo"
             width={142}
             height={44}

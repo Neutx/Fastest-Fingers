@@ -56,7 +56,7 @@ function HeaderComponent({ currentPage, isPageLoaded = true, className = "" }: H
           aria-label="Go to homepage"
         >
           <Image
-            src="/kreo.png"
+            src="/kreo.svg"
             alt="KREO Logo"
             width={100}
             height={31}
