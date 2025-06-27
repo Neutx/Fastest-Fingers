@@ -4,11 +4,12 @@ import { useState } from "react";
 import { SimpleUsersTable } from "./simple-users-table";
 import { AdminLeaderboard } from "./admin-leaderboard";
 import { AdminSettings } from "./admin-settings";
+import { CardManagement } from "./card-management";
 import Image from "next/image";
 import { UserData } from "@/types/admin";
 import { ExportButton } from "./export-button";
 import { StatsCards } from "./stats-cards";
-import { Users, Trophy, Settings } from "lucide-react";
+import { Users, Trophy, Settings, CreditCard } from "lucide-react";
 
 interface AdminDashboardProps {
   users: UserData[];
@@ -16,7 +17,7 @@ interface AdminDashboardProps {
 
 export function AdminDashboard({ users }: AdminDashboardProps) {
   const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
-  const [activeTab, setActiveTab] = useState<'users' | 'leaderboard' | 'settings'>('users');
+  const [activeTab, setActiveTab] = useState<'users' | 'leaderboard' | 'settings' | 'cards'>('users');
 
   return (
     <div className="min-h-screen bg-black text-white">
@@ -30,7 +31,7 @@ export function AdminDashboard({ users }: AdminDashboardProps) {
               aria-label="Go to homepage"
             >
               <Image
-                src="/kreo.png"
+                src="/kreo.svg"
                 alt="KREO Logo"
                 width={142}
                 height={44}
@@ -80,6 +81,17 @@ export function AdminDashboard({ users }: AdminDashboardProps) {
             Leaderboard
           </button>
           <button
+            onClick={() => setActiveTab('cards')}
+            className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+              activeTab === 'cards'
+                ? 'bg-[#A578FD] text-white'
+                : 'text-gray-400 hover:text-white hover:bg-gray-700'
+            }`}
+          >
+            <CreditCard size={16} />
+            Cards
+          </button>
+          <button
             onClick={() => setActiveTab('settings')}
             className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors ${
               activeTab === 'settings'
@@ -111,6 +123,8 @@ export function AdminDashboard({ users }: AdminDashboardProps) {
           </div>
         ) : activeTab === 'leaderboard' ? (
           <AdminLeaderboard users={users} />
+        ) : activeTab === 'cards' ? (
+          <CardManagement />
         ) : (
           <AdminSettings />
         )}

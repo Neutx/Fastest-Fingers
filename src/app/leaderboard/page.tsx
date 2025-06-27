@@ -128,7 +128,7 @@ export default function LeaderboardPage() {
                 ₹{prizePoolLoading ? "10,000" : totalPrizePool.toLocaleString()}
               </div>
               <div className="text-white/50 text-xs sm:text-sm">
-                {prizePoolLoading ? "5000 + 20 × 250" : formattedBreakdown}
+                {prizePoolLoading ? "5000 + 5 × 250" : formattedBreakdown}
               </div>
             </div>
           </div>
@@ -164,7 +164,7 @@ export default function LeaderboardPage() {
                   ₹{prizePoolLoading ? "10,000" : totalPrizePool.toLocaleString()}
                 </div>
                 <div className="text-white/50 text-sm sm:text-base md:text-lg text-center">
-                  {prizePoolLoading ? "5000 + 20 × 250" : formattedBreakdown}
+                  {prizePoolLoading ? "5000 + 5 × 250" : formattedBreakdown}
                 </div>
               </div>
             </div>

@@ -44,7 +44,7 @@ export function HeroSection() {
           data-scroll-speed="0.2"
         >
           <Image
-            src="/kreo.png"
+            src="/kreo.svg"
             alt="KREO Logo"
             width={200}
             height={62}

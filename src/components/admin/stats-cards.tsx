@@ -1,9 +1,9 @@
 "use client"
 
-import { Users, Trophy, MousePointer, Calendar } from "lucide-react";
+import { Users, Trophy, MousePointer, Calendar, RotateCw } from "lucide-react";
 import { UserData } from "@/types/admin";
 import { useState, useEffect } from "react";
-import { getExploreHive65Analytics, ButtonClickAnalytics } from "@/lib/admin-analytics";
+import { getExploreHive65Analytics, ButtonClickAnalytics, resetExploreHive65Analytics } from "@/lib/admin-analytics";
 
 interface StatsCardsProps {
   users: UserData[];
@@ -18,9 +18,24 @@ interface StatCardProps {
     value: number;
     isPositive: boolean;
   };
+  onReset?: () => Promise<void>;
+  isResettable?: boolean;
 }
 
-function StatCard({ title, value, icon, description, trend }: StatCardProps) {
+function StatCard({ title, value, icon, description, trend, onReset, isResettable }: StatCardProps) {
+  const [isResetting, setIsResetting] = useState(false);
+
+  const handleReset = async () => {
+    if (onReset) {
+      setIsResetting(true);
+      try {
+        await onReset();
+      } finally {
+        setIsResetting(false);
+      }
+    }
+  };
+
   return (
     <div className="bg-gray-900 border border-gray-800 rounded-lg p-6 hover:border-[#A578FD]/50 transition-colors">
       <div className="flex items-center justify-between">
@@ -29,7 +44,17 @@ function StatCard({ title, value, icon, description, trend }: StatCardProps) {
           <p className="text-2xl font-bold text-white mt-1">{value}</p>
           <p className="text-gray-500 text-xs mt-1">{description}</p>
         </div>
-        <div className="text-[#A578FD]">
+        <div className="text-[#A578FD] flex items-center">
+          {isResettable && (
+            <button 
+              onClick={handleReset} 
+              disabled={isResetting}
+              className="mr-4 p-2 rounded-full hover:bg-gray-700 transition-colors disabled:opacity-50"
+              aria-label="Reset stat"
+            >
+              <RotateCw size={18} className={isResetting ? "animate-spin" : ""} />
+            </button>
+          )}
           {icon}
         </div>
       </div>
@@ -48,14 +73,20 @@ function StatCard({ title, value, icon, description, trend }: StatCardProps) {
 export function StatsCards({ users }: StatsCardsProps) {
   const [buttonAnalytics, setButtonAnalytics] = useState<ButtonClickAnalytics | null>(null);
 
+  const fetchAnalytics = async () => {
+    const analytics = await getExploreHive65Analytics();
+    setButtonAnalytics(analytics);
+  };
+
   // Fetch button click analytics
   useEffect(() => {
-    const fetchAnalytics = async () => {
-      const analytics = await getExploreHive65Analytics();
-      setButtonAnalytics(analytics);
-    };
     fetchAnalytics();
   }, []);
+
+  const handleResetExploreHiveClicks = async () => {
+    await resetExploreHive65Analytics();
+    await fetchAnalytics(); // Re-fetch analytics after resetting
+  };
 
   // Calculate statistics
   const totalUsers = users.length;
@@ -93,6 +124,8 @@ export function StatsCards({ users }: StatsCardsProps) {
         icon={<MousePointer size={24} />}
         description="Users who signed up"
         trend={{ value: 8, isPositive: true }}
+        isResettable={true}
+        onReset={handleResetExploreHiveClicks}
       />
       
       <StatCard

@@ -1,5 +1,7 @@
 import Image from "next/image";
 import { useRef } from "react";
+import { useContestSettings } from "@/hooks/use-contest-settings";
+import { useCardSettings } from "@/hooks/use-card-settings";
 
 interface GiveawayModalProps {
   isOpen: boolean;
@@ -12,68 +14,7 @@ interface GiveawayModalProps {
   userName: string;
 }
 
-interface CardTier {
-  name: string;
-  wpmRange: string;
-  description: string;
-  bgGradient: string;
-  image: string;
-  minWpm: number;
-  maxWpm: number;
-}
 
-const cardTiers: CardTier[] = [
-  {
-    name: "Beginner",
-    wpmRange: "< 2500",
-    description: "You are probably\nstill using dial up connection",
-    bgGradient: "bg-violet-400",
-    image: "/cards/beginner-card.png", // placeholder
-    minWpm: 0,
-    maxWpm: 2499
-  },
-  {
-    name: "Casual",
-    wpmRange: "2.5K - 5K",
-    description: "Are you the sum of all numbers divided by how many there are? Because you're average.",
-    bgGradient: "bg-violet-400",
-    image: "/cards/casual-card.png", // placeholder
-    minWpm: 2500,
-    maxWpm: 4999
-  },
-  {
-    name: "Pro",
-    wpmRange: "5K - 8K",
-    description: "You're the fastest!\n(in your friend circle)",
-    bgGradient: "bg-violet-400",
-    image: "/cards/pro-card.png", // placeholder
-    minWpm: 5000,
-    maxWpm: 7999
-  },
-  {
-    name: "Elite",
-    wpmRange: "8K - 10K",
-    description: "It&apos;s not your fault. Repeat\nafter us. It&apos;s not your fault",
-    bgGradient: "bg-violet-400",
-    image: "/cards/elite-card.png", // placeholder
-    minWpm: 8000,
-    maxWpm: 9999
-  },
-  {
-    name: "Godlike",
-    wpmRange: "10K+",
-    description: "O Dear Lord! Please\nBless us all",
-    bgGradient: "bg-violet-400",
-    image: "/cards/godlike-card.png", // placeholder
-    minWpm: 10000,
-    maxWpm: Infinity
-  }
-];
-
-function getCardTier(score: number): CardTier {
-  const tier = cardTiers.find(tier => score >= tier.minWpm && score <= tier.maxWpm);
-  return tier || cardTiers[0]; // Default to beginner
-}
 
 function getPercentileText(score: number): string {
   // Simple calculation - in a real app you'd calculate this from actual data
@@ -85,9 +26,23 @@ function getPercentileText(score: number): string {
 }
 
 export function GiveawayModal({ isOpen, onClose, userScore, userName }: GiveawayModalProps) {
+  const { tweetLink } = useContestSettings();
+  const { getCardTier } = useCardSettings();
   const cardRef = useRef<HTMLDivElement>(null);
   const cardTier = getCardTier(userScore?.score || 0);
   const percentile = getPercentileText(userScore?.score || 0);
+  const formattedScore = (() => {
+    const score = userScore?.score || 0;
+    if (score >= 1000) {
+      // Format as e.g. 5K, 7.5K, etc.
+      const thousands = score / 1000;
+      // If the thousands part is an integer, don't keep decimals
+      return Number.isInteger(thousands)
+        ? `${thousands}K`
+        : `${thousands.toFixed(1)}K`;
+    }
+    return score.toString();
+  })();
 
   if (!isOpen || !userScore) return null;
 
@@ -112,7 +67,8 @@ export function GiveawayModal({ isOpen, onClose, userScore, userName }: Giveaway
   };
 
   const handleVisitTwitter = () => {
-    window.open("https://x.com/isawsukul", "_blank");
+    const link = tweetLink || "https://x.com/isawsukul";
+    window.open(link, "_blank", "noopener,noreferrer");
   };
 
   return (
@@ -139,7 +95,7 @@ export function GiveawayModal({ isOpen, onClose, userScore, userName }: Giveaway
                 {/* Card Image */}
                 <div className="w-52 h-36 left-4 top-10 absolute rounded-lg overflow-hidden">
                   <Image 
-                    src={cardTier.image} 
+                    src={cardTier.imageUrl} 
                     alt={`${cardTier.name} card`}
                     width={208}
                     height={144}
@@ -172,7 +128,7 @@ export function GiveawayModal({ isOpen, onClose, userScore, userName }: Giveaway
 
                   {/* Score */}
                   <div className="w-full top-[50px] right-[6px] absolute text-center text-white text-3xl font-normal font-['Dela_Gothic_One']">
-                    {cardTier.wpmRange}
+                    {formattedScore}
                   </div>
 
                   {/* Description */}
@@ -187,10 +143,9 @@ export function GiveawayModal({ isOpen, onClose, userScore, userName }: Giveaway
           {/* Text Content */}
           <div className="text-[#252525] font-['Montserrat'] text-[21px] leading-[31px] space-y-4">
             <p>
-                             Well Done! You&apos;re ahead than{" "}
-               <span className="text-[#A578FD] font-extrabold">x</span>
+                             Well Done! You&apos;re ahead of{" "}
                <span className="text-[#A578FD] font-bold">{percentile}%</span>{" "}
-               people. Although you couldn&apos;t win, you still have a chance to win the Kreo Hive 65.
+               people. Although you couldn&apos;t win, you still have a chance to win the Kreo Hive 65.
             </p>
 
                          <p>Here&apos;s how you can win:</p>

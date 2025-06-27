@@ -13,7 +13,8 @@ export function AdminSettings() {
     startTime: '',
     duration: 24,
     isActive: false,
-    hive65Link: ''
+    hive65Link: '',
+    tweetLink: ''
   });
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
@@ -38,7 +39,8 @@ export function AdminSettings() {
             startTime: '10:00',
             duration: 24,
             isActive: false,
-            hive65Link: ''
+            hive65Link: '',
+            tweetLink: ''
           });
         }
           } catch {
@@ -189,6 +191,25 @@ export function AdminSettings() {
           />
           <p className="text-gray-400 text-sm mt-1">
             This link will be used when users click on &quot;Hive 65&quot; text in the prizes section
+          </p>
+        </div>
+
+        {/* Tweet / X Post Link */}
+        <div>
+          <label className="block text-sm font-medium text-gray-300 mb-2">
+            <Link className="inline w-4 h-4 mr-2" />
+            X (Twitter) Post Link
+          </label>
+          <input
+            type="url"
+            value={settings.tweetLink || ''}
+            onChange={(e) => setSettings(prev => ({ ...prev, tweetLink: e.target.value }))}
+            placeholder="https://x.com/yourpost"
+            title="Enter the link to the X/Twitter post to quote-tweet"
+            className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white focus:ring-2 focus:ring-[#A578FD] focus:border-transparent"
+          />
+          <p className="text-gray-400 text-sm mt-1">
+            This link will be used for the &quot;Visit X&quot; button in the giveaway modal
           </p>
         </div>
 

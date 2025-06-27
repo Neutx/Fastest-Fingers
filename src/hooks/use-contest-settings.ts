@@ -65,6 +65,7 @@ export function useContestSettings() {
     getFormattedStartDateTime,
     getFormattedEndDateTime,
     isActive: settings?.isActive ?? false,
-    hive65Link: settings?.hive65Link
+    hive65Link: settings?.hive65Link,
+    tweetLink: settings?.tweetLink
   }
 } 

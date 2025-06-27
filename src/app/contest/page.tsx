@@ -207,7 +207,7 @@ export default function ContestPage() {
             aria-label="Go to homepage"
           >
           <Image
-            src="/kreo.png"
+            src="/kreo.svg"
             alt="KREO Logo"
             width={120}
             height={37}

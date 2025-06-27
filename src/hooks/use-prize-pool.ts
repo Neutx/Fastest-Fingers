@@ -16,9 +16,9 @@ export function usePrizePool(currentUserUid?: string) {
   const [prizeData, setPrizeData] = useState<PrizePoolData>({
     totalUsers: 0,
     basePrize: 5000,
-    perUserBonus: 20,
+    perUserBonus: 5,
     totalPrizePool: 5000,
-    formattedBreakdown: "5000 + 0 × 20"
+    formattedBreakdown: "5000 + 0 × 5"
   })
   const [isLoading, setIsLoading] = useState(true)
 
@@ -38,7 +38,7 @@ export function usePrizePool(currentUserUid?: string) {
         
         const totalUsers = querySnapshot.size
         const basePrize = 5000
-        const perUserBonus = 20
+        const perUserBonus = 5
         const totalPrizePool = basePrize + (totalUsers * perUserBonus)
         const formattedBreakdown = `${basePrize} + ${totalUsers} × ${perUserBonus}`
         
