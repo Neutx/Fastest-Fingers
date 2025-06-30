@@ -1,0 +1,8 @@
+[
+  {
+    "origin": ["http://localhost:3000", "https://localhost:3000", "https://fastest-fingers-kreo.web.app" , "https://fastest-fingers-kreo.firebaseapp.com", "https://fastestfingers.kreo-tech.com"],
+    "method": ["GET", "HEAD"],
+    "maxAgeSeconds": 3600,
+    "responseHeader": ["Content-Type", "Access-Control-Allow-Origin"]
+  }
+] 
