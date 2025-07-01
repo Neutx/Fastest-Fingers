@@ -1,5 +1,4 @@
-import Image from "next/image";
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import { useContestSettings } from "@/hooks/use-contest-settings";
 import { useCardSettings } from "@/hooks/use-card-settings";
 
@@ -14,7 +13,27 @@ interface GiveawayModalProps {
   userName: string;
 }
 
-
+// Helper function to convert image URL to base64
+const imageToBase64 = (url: string): Promise<string> => {
+  return new Promise((resolve) => {
+    const img = new window.Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = img.width;
+      canvas.height = img.height;
+      ctx?.drawImage(img, 0, 0);
+      const dataURL = canvas.toDataURL('image/png');
+      resolve(dataURL);
+    };
+    img.onerror = () => {
+      // If CORS fails, resolve with original URL
+      resolve(url);
+    };
+    img.src = url;
+  });
+};
 
 function getPercentileText(score: number): string {
   // Simple calculation - in a real app you'd calculate this from actual data
@@ -29,6 +48,10 @@ export function GiveawayModal({ isOpen, onClose, userScore, userName }: Giveaway
   const { tweetLink } = useContestSettings();
   const { getCardTier } = useCardSettings();
   const cardRef = useRef<HTMLDivElement>(null);
+  const [cardImageBase64, setCardImageBase64] = useState<string>('');
+  const [kreoLogoBase64, setKreoLogoBase64] = useState<string>('');
+  const [isLoadingImages, setIsLoadingImages] = useState(true);
+  
   const cardTier = getCardTier(userScore?.score || 0);
   const percentile = getPercentileText(userScore?.score || 0);
   const formattedScore = (() => {
@@ -44,24 +67,52 @@ export function GiveawayModal({ isOpen, onClose, userScore, userName }: Giveaway
     return score.toString();
   })();
 
+  // Preload and convert images to base64 when modal opens
+  useEffect(() => {
+    if (!isOpen || !userScore) return;
+
+    const loadImages = async () => {
+      setIsLoadingImages(true);
+      try {
+        const [cardBase64, logoBase64] = await Promise.all([
+          imageToBase64(cardTier.imageUrl),
+          imageToBase64('/kreo.svg')
+        ]);
+        setCardImageBase64(cardBase64);
+        setKreoLogoBase64(logoBase64);
+      } catch (error) {
+        console.error('Error loading images:', error);
+        // Fallback to original URLs
+        setCardImageBase64(cardTier.imageUrl);
+        setKreoLogoBase64('/kreo.svg');
+      } finally {
+        setIsLoadingImages(false);
+      }
+    };
+
+    loadImages();
+  }, [isOpen, userScore, cardTier.imageUrl]);
+
   if (!isOpen || !userScore) return null;
 
   const handleDownloadCard = async () => {
-    if (!cardRef.current) return;
+    if (!cardRef.current || isLoadingImages) return;
 
     try {
       const domtoimage = (await import('dom-to-image')).default;
       
       const dataUrl = await domtoimage.toPng(cardRef.current, {
         quality: 1.0,
+        width: 240,
+        height: 384,
       });
 
       const link = document.createElement('a');
       link.download = `${userName}-${cardTier.name}-card.png`;
       link.href = dataUrl;
       link.click();
-    } catch {
-      // Error downloading card
+    } catch (error) {
+      console.error('Error downloading card:', error);
       alert('Unable to download card. Please try again.');
     }
   };
@@ -94,13 +145,17 @@ export function GiveawayModal({ isOpen, onClose, userScore, userName }: Giveaway
               <div className="w-60 h-96 left-0 top-0 absolute bg-violet-400 rounded-2xl">
                 {/* Card Image */}
                 <div className="w-52 h-36 left-4 top-10 absolute rounded-lg overflow-hidden">
-                  <Image 
-                    src={cardTier.imageUrl} 
+                  {isLoadingImages ? (
+                    <div className="w-full h-full bg-gray-300 animate-pulse" />
+                  ) : (
+                    <img 
+                      src={cardImageBase64 || cardTier.imageUrl} 
                     alt={`${cardTier.name} card`}
                     width={208}
                     height={144}
                     className="w-full h-full object-cover"
                   />
+                  )}
                 </div>
 
                 {/* Badge */}
@@ -110,13 +165,17 @@ export function GiveawayModal({ isOpen, onClose, userScore, userName }: Giveaway
 
                 {/* Kreo Logo */}
                 <div className="w-12 h-5 left-[170px] top-3 absolute flex items-center justify-center">
-                  <Image 
-                    src="/kreo.svg" 
+                  {isLoadingImages ? (
+                    <div className="w-full h-full bg-gray-300 animate-pulse rounded" />
+                  ) : (
+                    <img 
+                      src={kreoLogoBase64 || '/kreo.svg'} 
                     alt="Kreo Logo"
                     width={48}
                     height={20}
                     className="w-full h-full object-contain"
                   />
+                  )}
                 </div>
 
                 {/* Card Content Bottom Section */}
@@ -155,9 +214,10 @@ export function GiveawayModal({ isOpen, onClose, userScore, userName }: Giveaway
                 1. Download{" "}
                 <button
                   onClick={handleDownloadCard}
-                  className="text-[#1557FF] underline hover:text-[#1557FF]/80 transition-colors cursor-pointer"
+                  disabled={isLoadingImages}
+                  className="text-[#1557FF] underline hover:text-[#1557FF]/80 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  your card.
+                  your card{isLoadingImages ? " (loading...)" : "."}
                 </button>
               </p>
               <p>

@@ -91,9 +91,9 @@ export function PrizesSection() {
         >
           <div className="animate-fade-in-up opacity-0 animate-delay-100">
             <PrizeCard
-              title="#The Winner aka the fastest typer"
-              description="Wins the entire prize pool amount set at a base of ₹5,000 and increases by ₹5 with every new participation*"
-              note="Capped at a maximum pool of ₹11000"
+              title="#The Winners aka the Top 3"
+              description="Wins the entire prize pool amount split by 50%, 30% and 20% for the first, second and the third position respectively*"
+              note="The base prizepool amount is INR 5000 that increases by INR 5 per participation"
             />
           </div>
           <div className="animate-fade-in-up opacity-0 animate-delay-200">

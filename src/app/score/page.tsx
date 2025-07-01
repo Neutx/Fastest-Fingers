@@ -13,6 +13,7 @@ import { doc, getDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { isMobileDevice } from "@/utils/device-detection";
 import { GiveawayModal } from "@/components/ui/giveaway-modal";
+import { AnnouncementBanner } from "@/components/ui/announcement-banner";
 
 interface UserScore {
   wpm: number;
@@ -128,6 +129,9 @@ export default function ScorePage() {
 
   return (
     <main className="h-screen w-screen bg-black relative flex flex-col overflow-hidden">
+      {/* Announcement Banner */}
+      <AnnouncementBanner />
+      
       {/* Header */}
       <Header 
         currentPage="giveaway" 
