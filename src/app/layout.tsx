@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Jost, Courier_Prime } from "next/font/google";
 import { AuthProvider } from "@/components/auth-provider";
+import { DevToolsBlocker } from "@/components/ui/dev-tools-blocker";
 import "./globals.css";
 
 const inter = Inter({
@@ -36,7 +37,8 @@ export default function RootLayout({
         suppressHydrationWarning={true}
       >
         <AuthProvider>
-        {children}
+          <DevToolsBlocker />
+          {children}
         </AuthProvider>
       </body>
     </html>

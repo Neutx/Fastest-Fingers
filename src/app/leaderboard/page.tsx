@@ -10,6 +10,7 @@ import { useLeaderboard } from "@/hooks/use-leaderboard";
 import { usePrizePool } from "@/hooks/use-prize-pool";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
+import { AnnouncementBanner } from "@/components/ui/announcement-banner";
 
 interface UserScore {
   wpm: number;
@@ -104,6 +105,9 @@ export default function LeaderboardPage() {
 
   return (
     <main className="h-screen w-screen bg-black relative flex flex-col overflow-hidden scrollbar-hide">
+      {/* Announcement Banner */}
+      <AnnouncementBanner />
+      
       {/* Header */}
       <Header 
         currentPage="leaderboard" 

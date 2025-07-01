@@ -196,6 +196,37 @@ button:focus-visible {
   box-shadow: none !important;
 }
 
+/* Scrolling Text Animation */
+@keyframes scroll-left {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes scroll-infinite {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-13.333%);
+  }
+}
+
+.animate-scroll-left {
+  animation: scroll-left 30s linear infinite;
+}
+
+.animate-scroll-left-slow {
+  animation: scroll-left 60s linear infinite;
+}
+
+.animate-scroll-infinite {
+  animation: scroll-infinite 20s linear infinite;
+}
+
 /* Hide scrollbars */
 .scrollbar-hide {
   -ms-overflow-style: none;  /* Internet Explorer 10+ */
