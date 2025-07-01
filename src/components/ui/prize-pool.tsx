@@ -18,10 +18,10 @@ export function PrizePool() {
         {/* Content */}
         <div className="pt-6 pb-4 px-6">
           <div className="text-white font-bold text-[42px] leading-none mb-1">
-            ₹{isLoading ? "10,000" : totalPrizePool.toLocaleString()}
+            ₹{isLoading ? "11,000" : totalPrizePool.toLocaleString()}
           </div>
           <div className="text-white/50 text-xs">
-            {isLoading ? "5000 + 5 × 250" : formattedBreakdown}
+            {isLoading ? "5000 + 5 × 1200 (capped at 11000)" : formattedBreakdown}
           </div>
         </div>
       </div>

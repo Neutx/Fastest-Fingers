@@ -27,10 +27,10 @@ export function DashboardPrizePool() {
         {/* Content */}
         <div className="pt-12 pb-8 px-12">
           <div className="text-white font-bold text-[72px] leading-none mb-3 text-center">
-            ₹{isLoading ? "5,000" : totalPrizePool.toLocaleString()}
+            ₹{isLoading ? "11,000" : totalPrizePool.toLocaleString()}
           </div>
           <div className="text-white/60 text-xl text-center">
-            {isLoading ? "5000 + 5 × 250" : formattedBreakdown}
+            {isLoading ? "5000 + 5 × 1200 (capped at 11000)" : formattedBreakdown}
           </div>
         </div>
       </div>

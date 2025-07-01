@@ -10,6 +10,7 @@ interface PrizePoolData {
   perUserBonus: number;
   totalPrizePool: number;
   formattedBreakdown: string;
+  maxPrizePool: number;
 }
 
 export function usePrizePool(currentUserUid?: string) {
@@ -18,7 +19,8 @@ export function usePrizePool(currentUserUid?: string) {
     basePrize: 5000,
     perUserBonus: 5,
     totalPrizePool: 5000,
-    formattedBreakdown: "5000 + 0 × 5"
+    formattedBreakdown: "5000 + 0 × 5",
+    maxPrizePool: 11000
   })
   const [isLoading, setIsLoading] = useState(true)
 
@@ -39,15 +41,22 @@ export function usePrizePool(currentUserUid?: string) {
         const totalUsers = querySnapshot.size
         const basePrize = 5000
         const perUserBonus = 5
-        const totalPrizePool = basePrize + (totalUsers * perUserBonus)
-        const formattedBreakdown = `${basePrize} + ${totalUsers} × ${perUserBonus}`
+        const maxPrizePool = 11000
+        const uncappedPrizePool = basePrize + (totalUsers * perUserBonus)
+        const totalPrizePool = Math.min(uncappedPrizePool, maxPrizePool)
+        
+        // Format breakdown based on whether cap is reached
+        const formattedBreakdown = uncappedPrizePool > maxPrizePool 
+          ? `${basePrize} + ${totalUsers} × ${perUserBonus} (capped at ${maxPrizePool})`
+          : `${basePrize} + ${totalUsers} × ${perUserBonus}`
         
         setPrizeData({
           totalUsers,
           basePrize,
           perUserBonus,
           totalPrizePool,
-          formattedBreakdown
+          formattedBreakdown,
+          maxPrizePool
         })
         
       } catch {

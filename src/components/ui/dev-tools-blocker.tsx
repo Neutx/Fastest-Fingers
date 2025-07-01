@@ -4,59 +4,86 @@ import { useEffect } from 'react';
 
 export function DevToolsBlocker() {
   useEffect(() => {
-    // Disable right-click context menu
+    // More aggressive right-click disabling
     const disableRightClick = (e: MouseEvent) => {
       e.preventDefault();
+      e.stopPropagation();
+      e.stopImmediatePropagation();
       return false;
     };
 
     // Disable developer tools keyboard shortcuts
     const disableDevToolsKeys = (e: KeyboardEvent) => {
       // F12
-      if (e.keyCode === 123) {
+      if (e.keyCode === 123 || e.key === 'F12') {
         e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation();
         return false;
       }
       
       // Ctrl+Shift+I (DevTools)
-      if (e.ctrlKey && e.shiftKey && e.keyCode === 73) {
+      if (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.key === 'I')) {
         e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation();
         return false;
       }
       
       // Ctrl+Shift+J (Console)
-      if (e.ctrlKey && e.shiftKey && e.keyCode === 74) {
+      if (e.ctrlKey && e.shiftKey && (e.keyCode === 74 || e.key === 'J')) {
         e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation();
         return false;
       }
       
       // Ctrl+U (View Source)
-      if (e.ctrlKey && e.keyCode === 85) {
+      if (e.ctrlKey && (e.keyCode === 85 || e.key === 'u' || e.key === 'U')) {
         e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation();
         return false;
       }
       
       // Ctrl+Shift+C (Element Inspector)
-      if (e.ctrlKey && e.shiftKey && e.keyCode === 67) {
+      if (e.ctrlKey && e.shiftKey && (e.keyCode === 67 || e.key === 'C')) {
         e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation();
         return false;
       }
       
       // Ctrl+Shift+K (Web Console in Firefox)
-      if (e.ctrlKey && e.shiftKey && e.keyCode === 75) {
+      if (e.ctrlKey && e.shiftKey && (e.keyCode === 75 || e.key === 'K')) {
         e.preventDefault();
-        return false;
-      }
-      
-      // F12 (DevTools)
-      if (e.keyCode === 123) {
-        e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation();
         return false;
       }
       
       // Ctrl+Shift+E (Network Monitor)
-      if (e.ctrlKey && e.shiftKey && e.keyCode === 69) {
+      if (e.ctrlKey && e.shiftKey && (e.keyCode === 69 || e.key === 'E')) {
         e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+        return false;
+      }
+
+      // Additional shortcuts
+      // Ctrl+Shift+M (Responsive Design Mode)
+      if (e.ctrlKey && e.shiftKey && (e.keyCode === 77 || e.key === 'M')) {
+        e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+        return false;
+      }
+
+      // Ctrl+Shift+R (Hard Refresh)
+      if (e.ctrlKey && e.shiftKey && (e.keyCode === 82 || e.key === 'R')) {
+        e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation();
         return false;
       }
     };
@@ -107,12 +134,30 @@ export function DevToolsBlocker() {
       console.log('%cThis is a browser feature intended for developers. Using console commands to manipulate the contest is strictly prohibited and will result in immediate disqualification.', 'color: red; font-size: 16px;');
     };
 
-    // Add event listeners
-    document.addEventListener('contextmenu', disableRightClick);
-    document.addEventListener('keydown', disableDevToolsKeys);
-    document.addEventListener('selectstart', disableSelection);
-    document.addEventListener('dragstart', disableDragDrop);
-    window.addEventListener('beforeprint', disablePrint);
+    // Add event listeners with capture phase to catch events early
+    document.addEventListener('contextmenu', disableRightClick, true);
+    document.addEventListener('keydown', disableDevToolsKeys, true);
+    document.addEventListener('keyup', disableDevToolsKeys, true);
+    document.addEventListener('selectstart', disableSelection, true);
+    document.addEventListener('dragstart', disableDragDrop, true);
+    document.addEventListener('mousedown', disableRightClick, true);
+    window.addEventListener('beforeprint', disablePrint, true);
+
+    // Additional event listeners for mobile
+    document.addEventListener('touchstart', (e) => {
+      if (e.touches.length > 1) {
+        e.preventDefault();
+        return false;
+      }
+    }, true);
+
+    // Disable image saving
+    document.addEventListener('dragstart', (e) => {
+      if (e.target instanceof HTMLImageElement) {
+        e.preventDefault();
+        return false;
+      }
+    }, true);
 
     // Start DevTools detection
     const detectionInterval = setInterval(detectDevTools, 1000);
@@ -138,11 +183,13 @@ export function DevToolsBlocker() {
 
     // Cleanup function
     return () => {
-      document.removeEventListener('contextmenu', disableRightClick);
-      document.removeEventListener('keydown', disableDevToolsKeys);
-      document.removeEventListener('selectstart', disableSelection);
-      document.removeEventListener('dragstart', disableDragDrop);
-      window.removeEventListener('beforeprint', disablePrint);
+      document.removeEventListener('contextmenu', disableRightClick, true);
+      document.removeEventListener('keydown', disableDevToolsKeys, true);
+      document.removeEventListener('keyup', disableDevToolsKeys, true);
+      document.removeEventListener('selectstart', disableSelection, true);
+      document.removeEventListener('dragstart', disableDragDrop, true);
+      document.removeEventListener('mousedown', disableRightClick, true);
+      window.removeEventListener('beforeprint', disablePrint, true);
       clearInterval(detectionInterval);
       clearInterval(antiDebugInterval);
     };

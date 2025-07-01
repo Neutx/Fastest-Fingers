@@ -32,6 +32,65 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                'use strict';
+                
+                // Immediate protection before page loads
+                document.addEventListener('contextmenu', function(e) {
+                  e.preventDefault();
+                  return false;
+                }, true);
+                
+                document.addEventListener('keydown', function(e) {
+                  // F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U, Ctrl+Shift+C
+                  if (e.keyCode === 123 || 
+                      (e.ctrlKey && e.shiftKey && e.keyCode === 73) ||
+                      (e.ctrlKey && e.shiftKey && e.keyCode === 74) ||
+                      (e.ctrlKey && e.keyCode === 85) ||
+                      (e.ctrlKey && e.shiftKey && e.keyCode === 67)) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    return false;
+                  }
+                }, true);
+                
+                // Console warning
+                setTimeout(function() {
+                  console.clear();
+                  console.log('%cSTOP!', 'color: red; font-size: 50px; font-weight: bold;');
+                  console.log('%cDeveloper tools are prohibited during the contest!', 'color: red; font-size: 16px;');
+                }, 100);
+                
+                // Override console methods
+                const originalLog = console.log;
+                const originalClear = console.clear;
+                
+                Object.defineProperty(console, 'log', {
+                  value: function() {
+                    if (arguments[0] && arguments[0].includes && arguments[0].includes('STOP!')) {
+                      originalLog.apply(console, arguments);
+                    }
+                  }
+                });
+                
+                Object.defineProperty(console, 'clear', {
+                  value: function() {
+                    originalClear.apply(console, arguments);
+                    setTimeout(function() {
+                      console.log('%cSTOP!', 'color: red; font-size: 50px; font-weight: bold;');
+                      console.log('%cDeveloper tools are prohibited!', 'color: red; font-size: 16px;');
+                    }, 100);
+                  }
+                });
+              })();
+            `,
+          }}
+        />
+      </head>
       <body
         className={`${inter.variable} ${jost.variable} ${courierPrime.variable} antialiased`}
         suppressHydrationWarning={true}

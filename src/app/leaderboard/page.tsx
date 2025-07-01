@@ -129,10 +129,10 @@ export default function LeaderboardPage() {
             {/* Content */}
             <div className="pt-4 sm:pt-6 pb-3 sm:pb-4 px-3 sm:px-6">
               <div className="text-white font-bold text-[28px] sm:text-[42px] leading-none mb-1">
-                ₹{prizePoolLoading ? "10,000" : totalPrizePool.toLocaleString()}
+                ₹{prizePoolLoading ? "11,000" : totalPrizePool.toLocaleString()}
               </div>
               <div className="text-white/50 text-xs sm:text-sm">
-                {prizePoolLoading ? "5000 + 5 × 250" : formattedBreakdown}
+                {prizePoolLoading ? "5000 + 5 × 1200 (capped at 11000)" : formattedBreakdown}
               </div>
             </div>
           </div>
@@ -165,10 +165,10 @@ export default function LeaderboardPage() {
               {/* Content */}
               <div className="pt-8 sm:pt-10 md:pt-12 pb-4 sm:pb-6 md:pb-8 px-4 sm:px-8 md:px-10">
                 <div className="text-white font-bold text-[36px] sm:text-[48px] md:text-[56px] leading-none mb-2 text-center">
-                  ₹{prizePoolLoading ? "10,000" : totalPrizePool.toLocaleString()}
+                  ₹{prizePoolLoading ? "11,000" : totalPrizePool.toLocaleString()}
                 </div>
                 <div className="text-white/50 text-sm sm:text-base md:text-lg text-center">
-                  {prizePoolLoading ? "5000 + 5 × 250" : formattedBreakdown}
+                  {prizePoolLoading ? "5000 + 5 × 1200 (capped at 11000)" : formattedBreakdown}
                 </div>
               </div>
             </div>
